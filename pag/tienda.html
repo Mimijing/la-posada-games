@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html class="dark" lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="../js/script.js"></script>
+
+    <link href="../img/logo.png" rel="icon" type="image/png"/>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600;700;800&family=Literata:ital,wght@0,400;0,600;1,400&family=MedievalSharp&family=Yeseva+One&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet"/>
+
+    <link href="../css/style.css" rel="stylesheet"/>
+    <link href="../css/tienda.css" rel="stylesheet"/>
+
+    <title>Tienda | La Posada Games and Drinks</title>
+</head>
+
+<body class="bg-background selection:bg-primary-container selection:text-on-primary-container custom-scrollbar">
+
+<header class="site-header">
+    <div class="site-header__inner">
+        <a class="site-brand" href="../index.html">
+            <div class="site-logo">
+                <img
+                    alt="Logo de La Posada Games and Drinks"
+                    class="site-logo__image"
+                    src="../img/logo.png"
+                />
+            </div>
+
+            <span class="site-title">
+                <span class="yeseva-one-regular">La Posada</span><br/>
+                <span class="taylor-gothic">Games and Drinks</span>
+            </span>
+        </a>
+
+        <nav class="main-navigation custom-scrollbar" aria-label="Navegación principal">
+            <a class="main-navigation__link" href="../index.html">
+                <span class="material-symbols-outlined text-lg">shield</span>
+                <span>Inicio</span>
+            </a>
+
+            <a class="main-navigation__link" href="catalogo.html">
+                <span class="material-symbols-outlined text-lg">casino</span>
+                <span>Catálogo de Juegos</span>
+            </a>
+
+            <a class="main-navigation__link" href="menu.html">
+                <span class="material-symbols-outlined text-lg">restaurant_menu</span>
+                <span>Menú</span>
+            </a>
+
+            <a
+                aria-current="page"
+                class="main-navigation__link main-navigation__link--active"
+                href="tienda.html"
+            >
+                <span class="material-symbols-outlined text-lg">storefront</span>
+                <span>Tienda</span>
+            </a>
+
+            <a class="main-navigation__link" href="promos.html">
+                <span class="material-symbols-outlined text-lg">mail</span>
+                <span>Promociones</span>
+            </a>
+        </nav>
+    </div>
+</header>
+
+<main class="shop-page">
+    <section class="shop-hero" aria-labelledby="shop-title">
+        <div class="shop-hero__overlay"></div>
+
+        <div class="shop-hero__content">
+            <p class="shop-kicker">Mercado de la Posada</p>
+            <h1 id="shop-title">Lleva una aventura a casa</h1>
+
+            <p>
+                Encuentra juegos para compartir nuevas historias.
+                Consulta el stock, arma tu pedido y envíalo directamente por WhatsApp.
+            </p>
+        </div>
+    </section>
+
+    <section class="shop-controls" aria-labelledby="shop-controls-title">
+        <div class="shop-controls__heading">
+            <div>
+                <span class="material-symbols-outlined" aria-hidden="true">search</span>
+
+                <div>
+                    <p class="shop-controls__eyebrow">Busca en el mercado</p>
+                    <h2 id="shop-controls-title">Encuentra tu próximo juego</h2>
+                </div>
+            </div>
+
+            <button class="shop-reset-button" id="shop-reset-button" type="button">
+                <span class="material-symbols-outlined">restart_alt</span>
+                Limpiar filtros
+            </button>
+        </div>
+
+        <div class="shop-filters">
+            <label class="shop-field">
+                Nombre del juego
+
+                <span class="shop-input-wrap">
+                    <span class="material-symbols-outlined" aria-hidden="true">search</span>
+
+                    <input
+                        autocomplete="off"
+                        id="shop-search"
+                        placeholder="Ej. Coffe Rush"
+                        type="search"
+                    />
+                </span>
+            </label>
+
+            <label class="shop-field">
+                Tipo
+
+                <select id="shop-type">
+                    <option value="">Todos</option>
+                    <option value="Juegos de estrategia">Estrategia</option>
+                    <option value="Juegos de conquista">Conquista</option>
+                    <option value="Juegos en equipo">En equipo</option>
+                    <option value="Juegos de party">Party</option>
+                    <option value="Juegos de mentir">Mentir</option>
+                    <option value="Juegos de cartas sencillos">Cartas sencillas</option>
+                    <option value="Destreza y rapidez">Destreza y rapidez</option>
+                </select>
+            </label>
+
+            <label class="shop-field">
+                Dificultad
+
+                <select id="shop-difficulty">
+                    <option value="">Todas</option>
+                    <option value="Principiante">Principiante</option>
+                    <option value="Conocedor">Conocedor</option>
+                    <option value="Sabio">Sabio</option>
+                </select>
+            </label>
+
+            <label class="shop-field">
+                Disponibilidad
+
+                <select id="shop-availability">
+                    <option value="">Todos</option>
+                    <option value="available">Disponibles</option>
+                    <option value="low">Últimas unidades</option>
+                    <option value="out">Agotados</option>
+                </select>
+            </label>
+        </div>
+    </section>
+
+    <section class="shop-results" aria-live="polite">
+        <div class="shop-results__header">
+            <div>
+                <p class="shop-kicker">Estantes del mercado</p>
+                <h2 class="shop-results__title">Juegos en venta</h2>
+            </div>
+
+            <p id="shop-count">Cargando juegos...</p>
+        </div>
+
+        <div class="shop-status" id="shop-status">
+            <span class="shop-loader" aria-hidden="true"></span>
+            <p>Consultando la tienda en Supabase...</p>
+        </div>
+
+        <div class="shop-grid" id="shop-grid"></div>
+
+        <nav
+            aria-label="Páginas de la tienda"
+            class="shop-pagination"
+            id="shop-pagination"
+            hidden
+        ></nav>
+    </section>
+</main>
+
+<!-- Botón flotante del carrito -->
+<button
+    aria-controls="shop-cart"
+    aria-expanded="false"
+    aria-label="Abrir carrito"
+    class="shop-cart-button"
+    id="shop-cart-button"
+    type="button"
+>
+    <span class="material-symbols-outlined" aria-hidden="true">shopping_bag</span>
+    <span class="shop-cart-button__text">Mi pedido</span>
+    <span class="shop-cart-button__count" id="shop-cart-count">0</span>
+</button>
+
+<!-- Carrito lateral -->
+<div class="shop-cart" id="shop-cart" hidden>
+    <button
+        aria-label="Cerrar carrito"
+        class="shop-cart__backdrop"
+        data-close-cart
+        type="button"
+    ></button>
+
+    <aside
+        aria-labelledby="shop-cart-title"
+        aria-modal="true"
+        class="shop-cart__panel"
+        role="dialog"
+    >
+        <header class="shop-cart__header">
+            <div>
+                <p class="shop-cart__eyebrow">Pedido de la Posada</p>
+                <h2 id="shop-cart-title">Tus juegos</h2>
+            </div>
+
+            <button
+                aria-label="Cerrar carrito"
+                class="shop-cart__close"
+                data-close-cart
+                type="button"
+            >
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </header>
+
+        <div class="shop-cart__empty" id="shop-cart-empty">
+            <span class="material-symbols-outlined">shopping_bag</span>
+            <strong>Tu pedido está vacío</strong>
+            <p>Agrega un juego desde la tienda para comenzar.</p>
+        </div>
+
+        <div class="shop-cart__items custom-scrollbar" id="shop-cart-items"></div>
+
+        <footer class="shop-cart__footer">
+            <div class="shop-cart__summary">
+                <span>Total estimado</span>
+                <strong id="shop-cart-total">Bs 0</strong>
+            </div>
+
+            <button class="shop-cart__clear" id="shop-cart-clear" type="button">
+                <span class="material-symbols-outlined">delete_sweep</span>
+                Vaciar carrito
+            </button>
+
+            <a
+                class="shop-cart__whatsapp"
+                id="shop-cart-whatsapp"
+                rel="noopener noreferrer"
+                target="_blank"
+            >
+                <i class="fa-brands fa-whatsapp"></i>
+                Enviar pedido por WhatsApp
+            </a>
+
+            <p class="shop-cart__note">
+                El total es referencial. La Posada confirmará stock y forma de entrega.
+            </p>
+        </footer>
+    </aside>
+</div>
+
+<div class="shop-toast" id="shop-toast" role="status" aria-live="polite"></div>
+
+<div class="floating-socials">
+    <a
+        aria-label="TikTok"
+        class="floating-social floating-social--tiktok"
+        href="https://www.tiktok.com/@la_posada_games_a?_r=1&_t=ZS-980W5NWQdaZ"
+        rel="noopener noreferrer"
+        target="_blank"
+    >
+        <i class="fa-brands fa-tiktok"></i>
+    </a>
+
+    <a
+        aria-label="Instagram"
+        class="floating-social floating-social--instagram"
+        href="https://www.instagram.com/laposadaoficial_?igsh=c2dqYmN4OGZ0emY4"
+        rel="noopener noreferrer"
+        target="_blank"
+    >
+        <i class="fa-brands fa-instagram"></i>
+    </a>
+
+    <a
+        aria-label="WhatsApp"
+        class="floating-social floating-social--whatsapp"
+        href="https://wa.me/59173724060"
+        rel="noopener noreferrer"
+        target="_blank"
+    >
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <a
+        aria-label="Facebook"
+        class="floating-social floating-social--facebook"
+        href="https://www.facebook.com/share/1F2aP35gU8/"
+        rel="noopener noreferrer"
+        target="_blank"
+    >
+        <i class="fa-brands fa-facebook-f"></i>
+    </a>
+</div>
+
+<footer class="site-footer">
+    <div class="site-footer__decoration site-footer__decoration--left"></div>
+    <div class="site-footer__decoration site-footer__decoration--right"></div>
+
+    <div class="site-footer__content">
+        <div class="footer-brand">
+            <a class="footer-brand__logo" href="../index.html">
+                <img alt="Logo de La Posada Games and Drinks" src="../img/logo.png"/>
+            </a>
+
+            <div class="footer-brand__title">
+                <span class="yeseva-one-regular">La Posada</span>
+                <span class="taylor-gothic">Games and Drinks</span>
+            </div>
+
+            <p class="footer-brand__description">
+                Juegos, bebidas y aventuras para compartir.
+            </p>
+        </div>
+
+        <div class="footer-navigation">
+            <h3 class="footer-heading">Explora la Posada</h3>
+
+            <nav class="footer-navigation__links">
+                <a href="../index.html">
+                    <span class="material-symbols-outlined">shield</span>
+                    Inicio
+                </a>
+
+                <a href="catalogo.html">
+                    <span class="material-symbols-outlined">casino</span>
+                    Catálogo de Juegos
+                </a>
+
+                <a href="menu.html">
+                    <span class="material-symbols-outlined">restaurant_menu</span>
+                    Menú
+                </a>
+
+                <a href="tienda.html">
+                    <span class="material-symbols-outlined">storefront</span>
+                    Tienda
+                </a>
+
+                <a href="promos.html">
+                    <span class="material-symbols-outlined">mail</span>
+                    Promociones
+                </a>
+            </nav>
+        </div>
+
+        <div class="footer-contact">
+            <h3 class="footer-heading">Habla con nosotros</h3>
+
+            <div class="footer-contact__list">
+                <a class="footer-contact__item" href="mailto:laposadagames@gmail.com">
+                    <span class="footer-contact__icon">
+                        <span class="material-symbols-outlined">mail</span>
+                    </span>
+
+                    <span>
+                        <small>Correo electrónico</small>
+                        <strong>laposadagames@gmail.com</strong>
+                    </span>
+                </a>
+
+                <a class="footer-contact__item" href="tel:+59173724060">
+                    <span class="footer-contact__icon">
+                        <span class="material-symbols-outlined">call</span>
+                    </span>
+
+                    <span>
+                        <small>Teléfono y WhatsApp</small>
+                        <strong>+591 73724060</strong>
+                    </span>
+                </a>
+
+                <a
+                    class="footer-contact__item"
+                    href="https://maps.app.goo.gl/PRKbBurQqHvgbFKt9"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                >
+                    <span class="footer-contact__icon">
+                        <span class="material-symbols-outlined">location_on</span>
+                    </span>
+
+                    <span>
+                        <small>Nuestra ubicación</small>
+                        <strong>La Paz, Bolivia</strong>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="site-footer__bottom">
+        <p>© 2026 La Posada Games and Drinks. Todos los derechos reservados.</p>
+
+        <a class="footer-back-top" href="#shop-title">
+            Volver arriba
+            <span class="material-symbols-outlined">arrow_upward</span>
+        </a>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/supabase-config.js"></script>
+<script src="../js/tienda.js"></script>
+</body>
+</html>

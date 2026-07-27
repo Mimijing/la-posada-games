@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries">
+</script>
+<script src="js/script.js">
+</script>
+<link href="img/logo.png" rel="icon" type="image/png"/>
+<link href="https://fonts.googleapis.com/css2?family=MedievalSharp&amp;family=Yeseva+One&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet"/>
+<link href="css/style.css" rel="stylesheet"/>
+<link href="css/inicio-dinamico.css" rel="stylesheet"/>
+<title>
+   La Posada Games and Drinks
+  </title>
+</head>
+<body class="bg-background selection:bg-primary-container selection:text-on-primary-container custom-scrollbar">
+<!-- Main Canvas -->
+<main class="min-h-screen relative pb-16 w-full">
+<!-- Menú horizontal superior -->
+<header class="site-header">
+<div class="site-header__inner">
+<!-- Identidad del local -->
+<a class="site-brand" href="#inicio">
+<div class="site-logo">
+<img alt="Logo de La Posada Games and Drinks" class="site-logo__image" src="img/logo.png"/>
+</div>
+<span class="site-title">
+<span class="yeseva-one-regular">La Posada</span>
+<br/>
+<span class="taylor-gothic">Games and Drinks</span>
+</span>
+</a>
+<!-- Enlaces siempre en una sola fila; en pantallas pequeñas se desplazan horizontalmente -->
+<nav class="main-navigation custom-scrollbar">
+<a aria-current="page" class="main-navigation__link main-navigation__link--active" href="index.html">
+<span class="material-symbols-outlined text-lg">
+        shield
+       </span>
+<span>
+        Inicio
+       </span>
+</a>
+<a class="main-navigation__link" href="pag/catalogo.html">
+<span class="material-symbols-outlined text-lg">
+        casino
+       </span>
+<span>
+        Catálogo de Juegos
+       </span>
+</a>
+<a class="main-navigation__link" href="pag/menu.html">
+<span class="material-symbols-outlined text-lg">
+        restaurant_menu
+       </span>
+<span>
+        Menú
+       </span>
+</a>
+<a class="main-navigation__link" href="pag/tienda.html">
+<span class="material-symbols-outlined text-lg">
+        storefront
+       </span>
+<span>
+        Tienda
+       </span>
+</a>
+<a class="main-navigation__link" href="pag/promos.html">
+<span class="material-symbols-outlined text-lg">
+        mail
+       </span>
+<span>
+        Promociones
+       </span>
+</a>
+</nav>
+<!-- Buscador -->
+<div class="header-search">
+<input class="header-search__input" placeholder="Buscar juegos" type="text"/>
+<span class="material-symbols-outlined header-search__icon">
+       search
+      </span>
+</div>
+</div>
+</header>
+<!-- HERO FONDOOO -->
+<section class="hero-section" id="inicio">
+<img alt="Tavern Interior Hero" class="hero-image" data-alt="A cinematic" src="img/FONDO.jpeg"/>
+<div class="hero-overlay">
+</div>
+<div class="hero-content">
+<div class="hero-panel">
+<h1 class="hero-title yeseva-one-regular">
+        La Posada
+        <span class="taylor-gothic">Games and Drinks</span>
+</h1>
+<div class="hero-actions">
+<a class="hero-button hero-button--primary" href="https://wa.me/59173724060">
+        Reservar mesa
+       </a>
+<a class="hero-button hero-button--secondary" href="#catalogo">
+        Ver Juegos
+       </a>
+</div>
+</div>
+</div>
+</section>
+<!-- Main Content Area -->
+<div class="px-margin-desktop py-12 grid grid-cols-12 gap-gutter max-w-container-max mx-auto">
+<!-- Announcements Column -->
+<div class="col-span-12 lg:col-span-4">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-secondary material-symbols-filled">
+                campaign
+            </span>
+<h3 class="font-headline-md text-headline-md">
+                Anuncios del Reino
+            </h3>
+</div>
+<!-- Contenedor dinámico de anuncios desde Supabase -->
+<div class="home-dynamic-status" id="home-announcements-status">
+    <span class="home-dynamic-loader" aria-hidden="true"></span>
+    <p>Cargando anuncios...</p>
+</div>
+<div aria-live="polite" class="announcements-list" id="home-announcements-list"></div>
+</div>
+<!-- Featured Games (Epic Cards) -->
+<div class="col-span-12 lg:col-span-8" id="catalogo">
+<div class="flex justify-between items-center mb-8">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary material-symbols-filled">
+        casino
+       </span>
+<h3 class="font-headline-md text-headline-md">
+        Juegos Destacados
+       </h3>
+</div>
+    <a class="featured-library-button" href="pag/catalogo.html">
+        <span>Ver biblioteca</span>
+
+        <span class="material-symbols-outlined" aria-hidden="true">
+            arrow_forward
+        </span>
+    </a>
+</div>
+<div class="home-dynamic-status" id="home-featured-status">
+<span class="home-dynamic-loader" aria-hidden="true"></span>
+<p>Cargando juegos destacados...</p>
+</div>
+<div
+    aria-live="polite"
+    class="grid grid-cols-1 md:grid-cols-2 gap-gutter"
+    id="home-featured-games"
+></div>
+<!-- Stats Dashboard Section -->
+<div class="mt-12 p-gutter bg-surface-container-lowest iron-border rounded-lg relative overflow-hidden">
+<!-- Wax Seal Decor -->
+<div class="absolute -top-4 -right-4 w-24 h-24 opacity-10 rotate-12">
+<span class="material-symbols-outlined text-8xl text-primary" data-icon="approval">
+        approval
+       </span>
+</div>
+<div class="flex flex-col items-center">
+<div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center mb-3 shadow-inner border border-outline-variant">
+<span class="material-symbols-outlined text-secondary text-3xl">
+          sports_esports
+         </span>
+</div>
+<span class="font-headline-md text-headline-md text-on-surface">
+         Tenemos +60
+        </span>
+<span class="font-label-caps text-label-caps text-outline">
+         Juegos de mesa
+        </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Ubicación del local -->
+<section class="location-section col-span-12" id="contacto">
+<div class="location-decoration location-decoration--one"></div>
+<div class="location-decoration location-decoration--two"></div>
+<!-- Información -->
+<div class="location-information">
+<h2 class="location-title yeseva-one-regular">
+                Nuestras Coordenadas
+            </h2>
+<div class="location-divider">
+<span></span>
+<span class="material-symbols-outlined">
+                    castle
+                </span>
+<span></span>
+</div>
+<p class="location-description">
+                Cruza las puertas de La Posada y disfruta de juegos de mesa,
+                bebidas y nuevas aventuras.
+            </p>
+<div class="location-address">
+<span class="material-symbols-outlined">
+                    location_on
+                </span>
+<div>
+<strong>La Posada Games and Drinks</strong>
+<p>Calle 3 de Los Pinos, La Paz, Bolivia</p>
+</div>
+</div>
+<a class="location-button" href="https://maps.app.goo.gl/PRKbBurQqHvgbFKt9" rel="noopener noreferrer" target="_blank">
+<span class="material-symbols-outlined">
+                    map
+                </span>
+
+                Abrir en Google Maps
+            </a>
+</div>
+<!-- Mapa -->
+<div class="location-map-container">
+<div class="location-map-header">
+<span class="material-symbols-outlined">
+                    distance
+                </span>
+<span>Mapa del Reino</span>
+</div>
+<iframe allowfullscreen="" class="location-map" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3824.5950416555916!2d-68.07386129999999!3d-16.5465296!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x915f2100332acccd%3A0xe679b4494c006af3!2sLa%20posada%20Games%20and%20drinks!5e0!3m2!1sen!2sbo!4v1783986792094!5m2!1sen!2sbo" title="Ubicación de La Posada Games and Drinks"></iframe>
+</div>
+</section>
+
+<!-- Redes sociales flotantes -->
+<div class="floating-socials">
+<a aria-label="TikTok" class="floating-social floating-social--tiktok" href="https://www.tiktok.com/@la_posada_games_a?_r=1&amp;_t=ZS-980W5NWQdaZ" rel="noopener noreferrer" target="_blank">
+<i class="fa-brands fa-tiktok"></i>
+</a>
+<a aria-label="Instagram" class="floating-social floating-social--instagram" href="https://www.instagram.com/laposadaoficial_?igsh=c2dqYmN4OGZ0emY4" rel="noopener noreferrer" target="_blank">
+<i class="fa-brands fa-instagram"></i>
+</a>
+<a aria-label="WhatsApp" class="floating-social floating-social--whatsapp" href="https://wa.me/59173724060" rel="noopener noreferrer" target="_blank">
+<i class="fa-brands fa-whatsapp"></i>
+</a>
+<a aria-label="Facebook" class="floating-social floating-social--facebook" href="https://www.facebook.com/share/1F2aP35gU8/" rel="noopener noreferrer" target="_blank">
+<i class="fa-brands fa-facebook-f"></i>
+</a>
+</div>
+
+</main>
+<!--FOOTER-->
+<footer class="site-footer">
+<div class="site-footer__decoration site-footer__decoration--left"></div>
+<div class="site-footer__decoration site-footer__decoration--right"></div>
+<div class="site-footer__content">
+<!-- Logo e identidad -->
+<div class="footer-brand">
+<a class="footer-brand__logo" href="#inicio">
+<img alt="Logo de La Posada Games and Drinks" src="img/logo.png"/>
+</a>
+<div class="footer-brand__title">
+<span class="yeseva-one-regular">
+                        La Posada
+                    </span>
+<span class="taylor-gothic">
+                        Games and Drinks
+                    </span>
+</div>
+<p class="footer-brand__description">
+                    Juegos, bebidas y aventuras para compartir.
+                </p>
+</div>
+<!-- Navegación -->
+<div class="footer-navigation">
+<h3 class="footer-heading">
+                    Explora la Posada
+                </h3>
+<nav class="footer-navigation__links">
+<a href="#inicio">
+<span class="material-symbols-outlined">
+                            shield
+                        </span>
+                        Inicio
+                    </a>
+<a href="pag/catalogo.html">
+<span class="material-symbols-outlined">
+                            casino
+                        </span>
+                        Catálogo de Juegos
+                    </a>
+<a href="pag/menu.html">
+<span class="material-symbols-outlined">
+                            restaurant_menu
+                        </span>
+                        Menú
+                    </a>
+<a href="pag/tienda.html">
+<span class="material-symbols-outlined">
+                            storefront
+                        </span>
+                        Tienda
+                    </a>
+<a href="pag/promos.html">
+<span class="material-symbols-outlined">
+                            mail
+                        </span>
+                        Promociones
+                    </a>
+</nav>
+</div>
+<!-- Información de contacto -->
+<div class="footer-contact">
+<h3 class="footer-heading">
+                    Habla con nosotros
+                </h3>
+<div class="footer-contact__list">
+<a class="footer-contact__item" href="mailto:laposadagames@gmail.com">
+<span class="footer-contact__icon">
+<span class="material-symbols-outlined">
+                                mail
+                            </span>
+</span>
+<span>
+<small>Correo electrónico</small>
+<strong>laposadagames@gmail.com</strong>
+</span>
+</a>
+<a class="footer-contact__item" href="tel:+59173724060">
+<span class="footer-contact__icon">
+<span class="material-symbols-outlined">
+                                call
+                            </span>
+</span>
+<span>
+<small>Teléfono y WhatsApp</small>
+<strong>+591 73724060</strong>
+</span>
+</a>
+<a class="footer-contact__item" href="https://maps.app.goo.gl/PRKbBurQqHvgbFKt9" rel="noopener noreferrer" target="_blank">
+<span class="footer-contact__icon">
+<span class="material-symbols-outlined">
+                                location_on
+                            </span>
+</span>
+<span>
+<small>Nuestra ubicación</small>
+<strong>La Paz, Bolivia</strong>
+</span>
+</a>
+</div>
+</div>
+</div>
+<!-- Parte inferior -->
+<div class="site-footer__bottom">
+<p>
+                © 2026 La Posada Games and Drinks.
+                Todos los derechos reservados.
+            </p>
+<a class="footer-back-top" href="#inicio">
+                Volver al inicio
+
+                <span class="material-symbols-outlined">
+                    arrow_upward
+                </span>
+</a>
+</div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/inicio-dinamico.js"></script>
+</body>
+</html>

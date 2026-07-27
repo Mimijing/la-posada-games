@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+
+    <link href="../img/logo.png" rel="icon" type="image/png"/>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600;700;800&family=Literata:wght@400;600&family=Yeseva+One&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+    <link href="../css/style.css" rel="stylesheet"/>
+    <link href="css/duenio.css" rel="stylesheet"/>
+
+    <title>Acceso del dueño | La Posada</title>
+</head>
+
+<body class="owner-login-page">
+    <main class="owner-login">
+        <section class="owner-login__visual" aria-hidden="true">
+            <div class="owner-login__visual-overlay"></div>
+
+            <div class="owner-login__visual-content">
+                <img
+                    alt=""
+                    class="owner-login__crest"
+                    src="../img/logo.png"
+                />
+
+                <p class="owner-eyebrow">Administración de la taberna</p>
+
+                <h1>
+                    La Posada
+                    <span class="taylor-gothic">Games and Drinks</span>
+                </h1>
+
+                <p>
+                    El libro privado donde se administran juegos,
+                    platos, promociones y anuncios del reino.
+                </p>
+            </div>
+        </section>
+
+        <section class="owner-login__form-section">
+            <div class="owner-login__form-wrap">
+                <a class="owner-login__back" href="../index.html">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                    Volver al sitio
+                </a>
+
+                <div class="owner-login__heading">
+                    <span class="owner-login__seal material-symbols-outlined">
+                        shield_lock
+                    </span>
+
+                    <div>
+                        <p class="owner-eyebrow">Acceso restringido</p>
+                        <h2>Ingreso del dueño</h2>
+                    </div>
+                </div>
+
+                <form class="owner-login-form" id="owner-login-form">
+                    <label class="owner-field">
+                        Correo electrónico
+
+                        <span class="owner-input">
+                           
+
+                            <input
+                                autocomplete="email"
+                                id="owner-email"
+                                name="email"
+                                placeholder="correo@ejemplo.com"
+                                required
+                                type="email"
+                            />
+                        
+                    </label>
+
+                    <label class="owner-field">
+                        Contraseña
+
+                        <span class="owner-input">
+                           
+
+                            <input
+                                autocomplete="current-password"
+                                id="owner-password"
+                                minlength="6"
+                                name="password"
+                                placeholder="Tu contraseña"
+                                required
+                                type="password"
+                            />
+
+                            <button
+                                aria-label="Mostrar contraseña"
+                                class="owner-password-toggle"
+                                id="owner-password-toggle"
+                                type="button"
+                            >
+                                <span class="material-symbols-outlined">visibility</span>
+                            </button>
+                      
+                    </label>
+
+                    <p
+                        class="owner-login-form__message"
+                        id="owner-login-message"
+                        role="alert"
+                    ></p>
+
+                    <button class="owner-primary-button" id="owner-login-submit" type="submit">
+                        <span class="material-symbols-outlined">login</span>
+                        Entrar al panel
+                    </button>
+                </form>
+
+                <p class="owner-login__note">
+                    Esta página no está enlazada en la navegación pública.
+                    Solo puede entrar el usuario autorizado en Supabase.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-config.js"></script>
+    <script src="js/login.js"></script>
+    <script src="../js/script.js"></script>
+</body>
+</html>

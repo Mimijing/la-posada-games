@@ -1,0 +1,144 @@
+LA POSADA GAMES AND DRINKS
+PANEL DEL DUEÑO
+
+============================================================
+CARPETA
+============================================================
+
+Copia la carpeta completa:
+
+La posada/
+└── duenio/
+    ├── login.html
+    ├── panel.html
+    ├── css/
+    │   └── duenio.css
+    ├── js/
+    │   ├── login.js
+    │   └── panel.js
+    └── sql/
+        ├── 01_configurar_panel_duenio.sql
+        └── 02_registrar_duenio.sql
+
+No la coloques dentro de pag/.
+
+El panel utiliza el archivo que ya tienes:
+
+La posada/js/supabase-config.js
+
+============================================================
+DIRECCIÓN
+============================================================
+
+No se añade ningún enlace en el sitio público.
+
+Para entrar escribe directamente:
+
+http://127.0.0.1:5500/duenio/login.html
+
+Cuando publiques el sitio será:
+
+https://tu-dominio.com/duenio/login.html
+
+La carpeta no es la seguridad principal.
+La protección real está en:
+- Inicio de sesión de Supabase.
+- Tabla privada public.duenios.
+- Políticas RLS.
+- Políticas de Storage.
+
+============================================================
+CREAR EL USUARIO
+============================================================
+
+1. Abre Supabase.
+2. Ve a Authentication > Users.
+3. Crea o invita al correo del dueño.
+4. Desactiva el registro público si todavía está habilitado.
+
+No escribas la contraseña dentro del HTML o JavaScript.
+
+============================================================
+EJECUTAR SQL
+============================================================
+
+Primero ejecuta:
+
+duenio/sql/01_configurar_panel_duenio.sql
+
+Después abre:
+
+duenio/sql/02_registrar_duenio.sql
+
+Cambia:
+
+CAMBIA_AQUI_EL_CORREO_DEL_DUENIO
+
+por el correo real creado en Authentication.
+
+Después presiona Run.
+
+============================================================
+QUÉ ADMINISTRA
+============================================================
+
+- catalogo_juegos
+- menu
+- tienda
+- promociones
+- anuncios
+
+Permite:
+- Añadir.
+- Editar.
+- Eliminar.
+- Buscar registros.
+- Subir imágenes desde el escritorio.
+- Pegar una URL pública.
+- Quitar o reemplazar imágenes.
+- Ver la página pública.
+- Cerrar sesión.
+
+============================================================
+IMÁGENES
+============================================================
+
+El SQL crea un bucket público llamado:
+
+imagenes-la-posada
+
+Se permiten:
+- JPG
+- PNG
+- WEBP
+- Máximo 5 MB
+
+La página pública puede ver las imágenes.
+Solo el dueño registrado puede subirlas o eliminarlas.
+
+============================================================
+IMPORTANTE
+============================================================
+
+El panel supone que ya existen estas tablas:
+
+- public.catalogo_juegos
+- public.menu
+- public.tienda
+- public.promociones
+- public.anuncios
+
+No uses la service_role key en ningún archivo público.
+El panel funciona con la Publishable key y la sesión del dueño.
+
+============================================================
+PRUEBA
+============================================================
+
+1. Abre el proyecto con Live Server.
+2. Entra a:
+
+http://127.0.0.1:5500/duenio/login.html
+
+3. Inicia sesión con el correo y contraseña del usuario creado.
+4. Prueba primero subiendo una imagen pequeña.
