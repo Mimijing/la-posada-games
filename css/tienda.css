@@ -41,9 +41,11 @@
 
     overflow: hidden;
 
-    background-image: url("../img/FONDO.jpeg");
-    background-position: center 48%;
-    background-size: cover;
+    background-image: url("../img/panda.jpg");
+    background-position: center 40%;
+    background-size: 92% auto;
+    background-repeat: no-repeat;
+    background-color: var(--surface-dark);
 
     border-bottom:
         1px solid

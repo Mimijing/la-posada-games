@@ -34,16 +34,18 @@
 
 .promos-hero {
     position: relative;
-    min-height: 340px;
+    min-height: 345px;
 
     display: flex;
     align-items: flex-end;
 
     overflow: hidden;
 
-    background-image: url("../img/FONDO.jpeg");
-    background-position: center 48%;
-    background-size: cover;
+    background-image: url("../img/adorno.jpg");
+    background-position: center 17%;
+    background-size: 92% auto;
+    background-repeat: no-repeat;
+    background-color: var(--surface-dark);
 
     border-bottom:
         1px solid

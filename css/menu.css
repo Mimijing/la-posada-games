@@ -33,24 +33,22 @@
 
 .menu-hero {
     position: relative;
-    min-height: 300px;
+    min-height: 345px;
 
     display: flex;
     align-items: flex-end;
 
     overflow: hidden;
 
-    background-image: url("../img/FONDO.jpeg");
-    background-position: center 52%;
-    background-size: cover;
+    background-image: url("../img/pared.jpg");
+    background-position: center 10%;
+    background-size: 92% auto;
+    background-repeat: no-repeat;
+    background-color: var(--surface-dark);
 
     border-bottom:
         1px solid
-        color-mix(
-            in srgb,
-            var(--gold) 32%,
-            transparent
-        );
+        color-mix(in srgb, var(--gold) 32%, transparent);
 }
 
 .menu-hero__overlay {
@@ -247,107 +245,6 @@
     font-weight: 800;
 }
 
-/* ---------- Promociones fijas ---------- */
-
-.menu-promotions__grid {
-    display: grid;
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-    gap: 24px;
-}
-
-.menu-promotion-image {
-    position: relative;
-    aspect-ratio: 16 / 7;
-    margin: 0;
-
-    overflow: hidden;
-
-    border:
-        1px solid
-        color-mix(
-            in srgb,
-            var(--gold) 55%,
-            transparent
-        );
-    border-radius: 13px;
-
-    background: var(--surface-dark);
-
-    box-shadow:
-        0 22px 40px
-        color-mix(
-            in srgb,
-            var(--surface-dark) 67%,
-            transparent
-        ),
-        inset 0 0 0 5px
-        color-mix(
-            in srgb,
-            var(--surface) 68%,
-            transparent
-        ),
-        inset 0 0 0 7px
-        color-mix(
-            in srgb,
-            var(--gold) 10%,
-            transparent
-        );
-
-    transition:
-        transform 220ms ease,
-        box-shadow 220ms ease;
-}
-
-.menu-promotion-image::after {
-    content: "";
-    position: absolute;
-    inset: 11px;
-
-    border:
-        1px solid
-        color-mix(
-            in srgb,
-            var(--gold-light) 22%,
-            transparent
-        );
-    border-radius: 7px;
-
-    pointer-events: none;
-}
-
-.menu-promotion-image:hover {
-    transform: translateY(-4px);
-
-    box-shadow:
-        0 28px 46px
-        color-mix(
-            in srgb,
-            var(--surface-dark) 74%,
-            transparent
-        );
-}
-
-.menu-promotion-image img {
-    width: 100%;
-    height: 100%;
-
-    display: block;
-
-    object-fit: cover;
-
-    transition:
-        transform 500ms ease,
-        filter 500ms ease;
-}
-
-.menu-promotion-image:hover img {
-    filter:
-        saturate(1.04)
-        contrast(1.03);
-
-    transform: scale(1.025);
-}
 
 /* ---------- Filtro pequeño ---------- */
 

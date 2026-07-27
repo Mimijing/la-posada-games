@@ -1394,9 +1394,9 @@ body {
     display: flex;
     align-items: flex-end;
     overflow: hidden;
-    background-image: url("../img/FONDO.jpeg");
+    background-image: url("../img/dados.jpg");
     background-size: cover;
-    background-position: center 46%;
+    background-position: center 65%;
     border-bottom: 1px solid rgba(215, 200, 106, 0.32);
 }
 
