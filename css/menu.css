@@ -792,3 +792,164 @@
     }
 
 }
+
+/* =========================================================
+   MENÚ MÓVIL — DOS COLUMNAS ESTABLES
+   En computadora no cambia nada.
+   En celular se simplifica el pintado para evitar huecos
+   al desplazarse rápido.
+   ========================================================= */
+
+@media (max-width: 560px) {
+    .menu-products-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px 10px;
+    }
+
+    .menu-product-card {
+        min-width: 0;
+        min-height: 0;
+        padding: 6px;
+
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+
+        overflow: hidden;
+
+        border: 1px solid rgba(215, 200, 106, 0.48);
+        border-radius: 9px;
+
+        background: var(--parchment);
+
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.28);
+
+        transform: none;
+        transition: none;
+    }
+
+    .menu-product-card::before {
+        display: none;
+    }
+
+    .menu-product-card:hover {
+        transform: none;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.28);
+    }
+
+    .menu-product-card__image-wrap {
+        order: -1;
+
+        width: 100%;
+        height: 125px;
+        flex: 0 0 125px;
+        margin: 0;
+
+        overflow: hidden;
+
+        border: 0;
+        border-radius: 6px;
+
+        background: var(--surface-dark);
+        box-shadow: none;
+    }
+
+    .menu-product-card__image {
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+
+        display: block;
+
+        object-fit: cover;
+
+        transform: none !important;
+        filter: none !important;
+        transition: none;
+    }
+
+    .menu-product-card__image--placeholder,
+    .menu-product-card__image--fallback {
+        padding: 24px;
+        box-sizing: border-box;
+        object-fit: contain;
+
+        background:
+            radial-gradient(
+                circle,
+                var(--surface-light),
+                var(--surface-dark)
+            );
+    }
+
+    .menu-product-card__content {
+        min-width: 0;
+        padding: 15px 10px 13px;
+
+        display: block;
+    }
+
+    .menu-product-card h3 {
+        margin: 0;
+
+        font-size: 0.95rem;
+        line-height: 1.2;
+    }
+
+    .menu-product-card h3::after {
+        width: 38px;
+        margin-top: 8px;
+    }
+
+    .menu-product-card__description {
+        margin: 9px 0 0;
+
+        display: -webkit-box;
+        overflow: hidden;
+
+        font-size: 0.68rem;
+        line-height: 1.45;
+
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+    }
+
+    .menu-product-card__price {
+        top: 8px;
+        right: 8px;
+
+        min-width: 54px;
+        min-height: 54px;
+        padding: 5px;
+
+        border-width: 1px;
+
+        font-size: 0.72rem;
+    }
+}
+
+/* =========================================================
+   MENÚ — MARCADOR DE IMAGEN TAMBIÉN EN COMPUTADORA
+   Mientras llega la foto real, muestra el logo de La Posada
+   en lugar de dejar el recuadro oscuro.
+   ========================================================= */
+
+.menu-product-card__image--placeholder {
+    padding: 32px;
+    box-sizing: border-box;
+    object-fit: contain;
+
+    background:
+        radial-gradient(
+            circle,
+            var(--surface-light),
+            var(--surface-dark)
+        );
+}
+
+@media (max-width: 560px) {
+    .menu-product-card__image--placeholder {
+        padding: 24px;
+    }
+}
+

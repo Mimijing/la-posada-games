@@ -707,3 +707,47 @@
         transition: none;
     }
 }
+
+/* =========================================================
+   PROMOCIONES — PERGAMINOS EN DOS COLUMNAS EN MÓVIL
+   Solo modifica "Avisos de la Posada".
+   ========================================================= */
+
+@media (max-width: 700px) {
+    .promos-notices__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px 10px;
+    }
+
+    .promos-note {
+        min-height: 190px;
+        padding: 23px 14px 18px;
+    }
+
+    .promos-note::before {
+        inset: 7px;
+    }
+
+    .promos-note::after {
+        width: 27px;
+        height: 27px;
+        font-size: 0.58rem;
+    }
+
+    .promos-note h3 {
+        font-size: 0.95rem;
+        line-height: 1.2;
+    }
+
+    .promos-note h3::after {
+        width: 42px;
+        margin-top: 9px;
+    }
+
+    .promos-note p {
+        margin: 10px 0 13px;
+        font-size: 0.68rem;
+        line-height: 1.45;
+    }
+}
+

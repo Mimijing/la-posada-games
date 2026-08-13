@@ -22,6 +22,7 @@
         visibleProducts: [],
         cart: [],
         currentPage: 1,
+        selectedClass: "",
         selectedProductId: null,
         selectedProductImages: [],
         selectedImageIndex: 0,
@@ -40,6 +41,14 @@
         elements.type = document.getElementById("shop-type");
         elements.difficulty = document.getElementById("shop-difficulty");
         elements.availability = document.getElementById("shop-availability");
+        elements.size = document.getElementById("shop-size");
+        elements.sizeField = document.getElementById("shop-size-field");
+        elements.typeField = document.getElementById("shop-type-field");
+        elements.difficultyField = document.getElementById("shop-difficulty-field");
+        elements.classButtons = Array.from(
+            document.querySelectorAll("[data-shop-class]")
+        );
+        elements.controls = document.querySelector(".shop-controls");
         elements.reset = document.getElementById("shop-reset-button");
 
         elements.grid = document.getElementById("shop-grid");
@@ -67,10 +76,8 @@
         elements.dialogAvailability = document.getElementById("shop-dialog-availability");
         elements.dialogTitle = document.getElementById("shop-dialog-title");
         elements.dialogDescription = document.getElementById("shop-dialog-description");
-        elements.dialogPlayers = document.getElementById("shop-dialog-players");
-        elements.dialogDuration = document.getElementById("shop-dialog-duration");
-        elements.dialogDifficulty = document.getElementById("shop-dialog-difficulty");
-        elements.dialogStock = document.getElementById("shop-dialog-stock");
+        elements.dialogBase = document.getElementById("shop-dialog-base");
+        elements.dialogFacts = document.getElementById("shop-dialog-facts");
         elements.dialogPrice = document.getElementById("shop-dialog-price");
         elements.dialogAdd = document.getElementById("shop-dialog-add");
 
@@ -85,14 +92,25 @@
             elements.search,
             elements.type,
             elements.difficulty,
-            elements.availability
+            elements.availability,
+            elements.size
         ];
 
         filterElements.forEach((element) => {
-            element.addEventListener(
+            element?.addEventListener(
                 element.tagName === "INPUT" ? "input" : "change",
                 applyFilters
             );
+        });
+
+        elements.classButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                state.selectedClass =
+                    button.dataset.shopClass || "";
+
+                updateClassControls();
+                applyFilters();
+            });
         });
 
         elements.reset.addEventListener("click", resetFilters);
@@ -174,14 +192,14 @@
 
         showStatus(
             "loading",
-            "Consultando la tienda en Supabase..."
+            "Revisando los estantes de La Posada..."
         );
 
         const { data, error } =
             await window.laPosadaSupabase
                 .from("tienda")
                 .select(
-                    "id,nombre,tipo,descripcion,jugadores_min,jugadores_max,dificultad,duracion_minutos,precio,stock,foto_url,tienda_imagenes(id,imagen_url,orden)"
+                    "id,nombre,tipo,descripcion,jugadores_min,jugadores_max,dificultad,duracion_minutos,precio,stock,foto_url,clase_producto,juego_base_requerido,ancho_funda_mm,alto_funda_mm,cantidad_fundas,compatibilidad,tienda_imagenes(id,imagen_url,orden)"
                 )
                 .order("nombre", { ascending: true });
 
@@ -190,7 +208,7 @@
 
             showStatus(
                 "error",
-                "No se pudo cargar la tienda. Revisa la tabla tienda y sus políticas RLS."
+                "No se pudo cargar la tienda."
             );
 
             elements.count.textContent = "Error al cargar";
@@ -201,6 +219,8 @@
             ? data.map(normalizeProduct)
             : [];
 
+        populateSizeFilter();
+        updateClassControls();
         synchronizeCartWithStock();
         applyFilters();
         renderCart();
@@ -239,6 +259,9 @@
             jugadores_min: Number(product.jugadores_min) || 0,
             jugadores_max: Number(product.jugadores_max) || 0,
             duracion_minutos: Number(product.duracion_minutos) || 0,
+            ancho_funda_mm: Number(product.ancho_funda_mm) || 0,
+            alto_funda_mm: Number(product.alto_funda_mm) || 0,
+            cantidad_fundas: Math.max(0, Number(product.cantidad_fundas) || 0),
             images
         };
     }
@@ -248,6 +271,8 @@
         const type = elements.type.value;
         const difficulty = elements.difficulty.value;
         const availability = elements.availability.value;
+        const size = elements.size?.value || "";
+        const selectedClass = state.selectedClass;
 
         state.visibleProducts =
             state.products.filter((product) => {
@@ -255,12 +280,24 @@
                     [
                         product.nombre,
                         product.tipo,
-                        product.descripcion
-                    ].join(" ")
+                        product.descripcion,
+                        product.clase_producto,
+                        product.juego_base_requerido,
+                        product.compatibilidad,
+                        formatSleeveSize(product)
+                    ]
+                        .filter(Boolean)
+                        .join(" ")
                 );
+
+                const productClass = getProductClass(product);
 
                 const matchesQuery =
                     !query || searchable.includes(query);
+
+                const matchesClass =
+                    !selectedClass ||
+                    productClass === selectedClass;
 
                 const matchesType =
                     !type || product.tipo === type;
@@ -273,11 +310,17 @@
                     !availability ||
                     getAvailabilityKey(product.stock) === availability;
 
+                const matchesSize =
+                    !size ||
+                    getSleeveSizeKey(product) === size;
+
                 return (
                     matchesQuery &&
+                    matchesClass &&
                     matchesType &&
                     matchesDifficulty &&
-                    matchesAvailability
+                    matchesAvailability &&
+                    matchesSize
                 );
             });
 
@@ -285,13 +328,127 @@
         renderProducts();
     }
 
+
     function resetFilters() {
         elements.search.value = "";
         elements.type.value = "";
         elements.difficulty.value = "";
         elements.availability.value = "";
 
+        if (elements.size) {
+            elements.size.value = "";
+        }
+
+        state.selectedClass = "";
+        updateClassControls();
         applyFilters();
+    }
+
+
+    function updateClassControls() {
+        const isSleeves =
+            state.selectedClass === "Fundas";
+
+        elements.classButtons.forEach((button) => {
+            const value =
+                button.dataset.shopClass || "";
+
+            const isActive =
+                value === state.selectedClass;
+
+            button.classList.toggle(
+                "shop-class-tab--active",
+                isActive
+            );
+
+            button.setAttribute(
+                "aria-pressed",
+                String(isActive)
+            );
+        });
+
+        if (elements.typeField) {
+            elements.typeField.hidden = isSleeves;
+        }
+
+        if (elements.difficultyField) {
+            elements.difficultyField.hidden = isSleeves;
+        }
+
+        if (elements.sizeField) {
+            elements.sizeField.hidden = !isSleeves;
+        }
+
+        elements.controls?.classList.toggle(
+            "shop-controls--sleeves",
+            isSleeves
+        );
+
+        if (isSleeves) {
+            elements.type.value = "";
+            elements.difficulty.value = "";
+        } else if (elements.size) {
+            elements.size.value = "";
+        }
+    }
+
+    function populateSizeFilter() {
+        if (!elements.size) {
+            return;
+        }
+
+        const currentValue = elements.size.value;
+
+        const sizes = new Map();
+
+        state.products.forEach((product) => {
+            if (getProductClass(product) !== "Fundas") {
+                return;
+            }
+
+            const key = getSleeveSizeKey(product);
+
+            if (!key) {
+                return;
+            }
+
+            sizes.set(key, formatSleeveSize(product));
+        });
+
+        elements.size.replaceChildren();
+
+        const defaultOption =
+            document.createElement("option");
+
+        defaultOption.value = "";
+        defaultOption.textContent =
+            "Todos los tamaños";
+
+        elements.size.appendChild(defaultOption);
+
+        [...sizes.entries()]
+            .sort((a, b) =>
+                a[1].localeCompare(
+                    b[1],
+                    "es",
+                    { numeric: true }
+                )
+            )
+            .forEach(([key, label]) => {
+                const option =
+                    document.createElement("option");
+
+                option.value = key;
+                option.textContent = label;
+
+                elements.size.appendChild(option);
+            });
+
+        if (
+            [...sizes.keys()].includes(currentValue)
+        ) {
+            elements.size.value = currentValue;
+        }
     }
 
     function renderProducts() {
@@ -301,8 +458,8 @@
 
         elements.count.textContent =
             total === 1
-                ? "1 juego"
-                : `${total} juegos`;
+                ? "1 producto"
+                : `${total} productos`;
 
         if (total === 0) {
             elements.pagination.hidden = true;
@@ -311,8 +468,8 @@
             showStatus(
                 "empty",
                 state.products.length === 0
-                    ? "Todavía no hay juegos registrados para la venta."
-                    : "No encontramos juegos con esos filtros."
+                    ? "Todavía no hay productos registrados para la venta."
+                    : "No encontramos productos con esos filtros."
             );
 
             return;
@@ -352,8 +509,12 @@
         article.setAttribute("role", "button");
         article.setAttribute(
             "aria-label",
-            `Ver detalles de ${product.nombre || "este juego"}`
+            `Ver detalles de ${product.nombre || "este producto"}`
         );
+
+        const productClass = getProductClass(product);
+        const isSleeves = productClass === "Fundas";
+        const isExpansion = productClass === "Expansión";
 
         const imageWrap = document.createElement("div");
         imageWrap.className = "shop-card__image-wrap";
@@ -361,8 +522,8 @@
         const image = createImage(
             product.foto_url,
             product.nombre
-                ? `Juego ${product.nombre}`
-                : "Juego de mesa",
+                ? `Producto ${product.nombre}`
+                : "Producto de La Posada",
             "shop-card__image"
         );
 
@@ -385,20 +546,53 @@
         const content = document.createElement("div");
         content.className = "shop-card__content";
 
-        const difficulty = document.createElement("span");
-        difficulty.className =
-            `shop-card__difficulty shop-card__difficulty--${difficultyClass(product.dificultad)}`;
-        difficulty.textContent = product.dificultad || "Sin nivel";
+        if (isExpansion || isSleeves) {
+            const formatBadge = document.createElement("span");
+            formatBadge.className =
+                `shop-card__format shop-card__format--${isSleeves ? "sleeves" : "expansion"}`;
+            formatBadge.textContent =
+                isSleeves ? "Fundas" : "Expansión";
+
+            content.appendChild(formatBadge);
+        }
+
+        if (!isSleeves) {
+            const difficulty = document.createElement("span");
+            difficulty.className =
+                `shop-card__difficulty shop-card__difficulty--${difficultyClass(product.dificultad)}`;
+            difficulty.textContent =
+                product.dificultad || "Sin nivel";
+
+            content.appendChild(difficulty);
+        }
 
         const title = document.createElement("h3");
-        title.textContent = product.nombre || "Juego sin nombre";
+        title.textContent =
+            product.nombre || "Producto sin nombre";
 
         const metadata = document.createElement("div");
         metadata.className = "shop-card__metadata";
-        metadata.append(
-            createMetadata("groups", formatPlayers(product)),
-            createMetadata("timer", formatDuration(product.duracion_minutos))
-        );
+
+        if (isSleeves) {
+            metadata.append(
+                createMetadata(
+                    "straighten",
+                    formatSleeveSize(product)
+                ),
+                createMetadata(
+                    "style",
+                    formatSleeveQuantity(product)
+                )
+            );
+        } else {
+            metadata.append(
+                createMetadata("groups", formatPlayers(product)),
+                createMetadata(
+                    "timer",
+                    formatDuration(product.duracion_minutos)
+                )
+            );
+        }
 
         const description = document.createElement("p");
         description.className = "shop-card__description";
@@ -436,7 +630,6 @@
 
         purchase.append(priceRow, button);
         content.append(
-            difficulty,
             title,
             metadata,
             description,
@@ -458,6 +651,7 @@
 
         return article;
     }
+
 
     function createMetadata(iconName, text) {
         const item = document.createElement("span");
@@ -499,8 +693,16 @@
 
         renderDialogCarousel();
 
+        const productClass = getProductClass(product);
+        const isSleeves = productClass === "Fundas";
+        const isExpansion = productClass === "Expansión";
+
         elements.dialogType.textContent =
-            product.tipo || "Juego de mesa";
+            isSleeves
+                ? "Fundas"
+                : isExpansion
+                    ? "Expansión"
+                    : product.tipo || "Juego de mesa";
 
         const availabilityKey = getAvailabilityKey(product.stock);
         elements.dialogAvailability.className =
@@ -509,20 +711,30 @@
             getAvailabilityLabel(product.stock);
 
         elements.dialogTitle.textContent =
-            product.nombre || "Juego sin nombre";
+            product.nombre || "Producto sin nombre";
         elements.dialogDescription.textContent =
             product.descripcion ||
-            "Este juego todavía no tiene una descripción.";
-        elements.dialogPlayers.textContent = formatPlayers(product);
-        elements.dialogDuration.textContent =
-            formatDuration(product.duracion_minutos);
-        elements.dialogDifficulty.textContent =
-            product.dificultad || "Sin nivel";
-        elements.dialogStock.textContent =
-            product.stock === 1
-                ? "1 unidad"
-                : `${product.stock} unidades`;
-        elements.dialogPrice.textContent = formatPrice(product.precio);
+            "Este producto todavía no tiene una descripción.";
+
+        const requiredGame =
+            String(product.juego_base_requerido || "").trim();
+
+        if (
+            isExpansion &&
+            requiredGame
+        ) {
+            elements.dialogBase.textContent =
+                `Requiere el juego base: ${requiredGame}`;
+            elements.dialogBase.hidden = false;
+        } else {
+            elements.dialogBase.textContent = "";
+            elements.dialogBase.hidden = true;
+        }
+
+        renderDialogFacts(product);
+
+        elements.dialogPrice.textContent =
+            formatPrice(product.precio);
 
         elements.dialogAdd.disabled = product.stock <= 0;
         elements.dialogAdd.innerHTML = product.stock > 0
@@ -540,6 +752,115 @@
         });
     }
 
+
+    function renderDialogFacts(product) {
+        elements.dialogFacts.replaceChildren();
+
+        const productClass =
+            getProductClass(product);
+
+        const facts =
+            productClass === "Fundas"
+                ? [
+                    [
+                        "straighten",
+                        "Tamaño",
+                        formatSleeveSize(product)
+                    ],
+                    [
+                        "style",
+                        "Cantidad",
+                        formatSleeveQuantity(product)
+                    ],
+                    [
+                        "extension",
+                        "Compatibilidad",
+                        product.compatibilidad ||
+                            "Consultar"
+                    ],
+                    [
+                        "inventory_2",
+                        "Stock",
+                        product.stock === 1
+                            ? "1 unidad"
+                            : `${product.stock} unidades`
+                    ]
+                ]
+                : [
+                    [
+                        "groups",
+                        "Jugadores",
+                        formatPlayers(product)
+                    ],
+                    [
+                        "timer",
+                        "Duración",
+                        formatDuration(
+                            product.duracion_minutos
+                        )
+                    ],
+                    [
+                        "strategy",
+                        "Dificultad",
+                        product.dificultad ||
+                            "Sin nivel"
+                    ],
+                    [
+                        "inventory_2",
+                        "Stock",
+                        product.stock === 1
+                            ? "1 unidad"
+                            : `${product.stock} unidades`
+                    ]
+                ];
+
+        facts.forEach(
+            ([iconName, label, value]) => {
+                const fact =
+                    document.createElement("div");
+
+                fact.className =
+                    "shop-game-dialog__fact";
+
+                if (
+                    productClass === "Fundas" &&
+                    label === "Compatibilidad"
+                ) {
+                    fact.classList.add(
+                        "shop-game-dialog__fact--wide"
+                    );
+                }
+
+                const icon =
+                    document.createElement("span");
+
+                icon.className =
+                    "material-symbols-outlined";
+                icon.textContent = iconName;
+                icon.setAttribute(
+                    "aria-hidden",
+                    "true"
+                );
+
+                const body =
+                    document.createElement("div");
+
+                const small =
+                    document.createElement("small");
+                small.textContent = label;
+
+                const strong =
+                    document.createElement("strong");
+                strong.textContent = value;
+
+                body.append(small, strong);
+                fact.append(icon, body);
+
+                elements.dialogFacts.appendChild(fact);
+            }
+        );
+    }
+
     function renderDialogCarousel() {
         const images = state.selectedProductImages;
         const total = images.length;
@@ -553,7 +874,7 @@
 
         elements.dialogImage.src = currentUrl;
         elements.dialogImage.alt =
-            `Imagen ${state.selectedImageIndex + 1} del juego`;
+            `Imagen ${state.selectedImageIndex + 1} del producto`;
         elements.dialogImage.onerror = () => {
             elements.dialogImage.src = FALLBACK_IMAGE;
         };
@@ -722,7 +1043,7 @@
                     </div>
 
                     <div
-                        aria-label="Imágenes del juego"
+                        aria-label="Imágenes del producto"
                         class="shop-game-dialog__thumbnails"
                         id="shop-dialog-thumbnails"
                     ></div>
@@ -743,39 +1064,16 @@
                         id="shop-dialog-description"
                     ></p>
 
-                    <div class="shop-game-dialog__facts">
-                        <div class="shop-game-dialog__fact">
-                            <span class="material-symbols-outlined">groups</span>
-                            <div>
-                                <small>Jugadores</small>
-                                <strong id="shop-dialog-players"></strong>
-                            </div>
-                        </div>
+                    <p
+                        class="shop-game-dialog__base-game"
+                        id="shop-dialog-base"
+                        hidden
+                    ></p>
 
-                        <div class="shop-game-dialog__fact">
-                            <span class="material-symbols-outlined">timer</span>
-                            <div>
-                                <small>Duración</small>
-                                <strong id="shop-dialog-duration"></strong>
-                            </div>
-                        </div>
-
-                        <div class="shop-game-dialog__fact">
-                            <span class="material-symbols-outlined">strategy</span>
-                            <div>
-                                <small>Dificultad</small>
-                                <strong id="shop-dialog-difficulty"></strong>
-                            </div>
-                        </div>
-
-                        <div class="shop-game-dialog__fact">
-                            <span class="material-symbols-outlined">inventory_2</span>
-                            <div>
-                                <small>Stock</small>
-                                <strong id="shop-dialog-stock"></strong>
-                            </div>
-                        </div>
-                    </div>
+                    <div
+                        class="shop-game-dialog__facts"
+                        id="shop-dialog-facts"
+                    ></div>
 
                     <div class="shop-game-dialog__purchase">
                         <div>
@@ -894,7 +1192,7 @@
         const product = findProduct(productId);
 
         if (!product || product.stock <= 0) {
-            showToast("Este juego ya no tiene stock disponible.");
+            showToast("Este producto ya no tiene stock disponible.");
             return;
         }
 
@@ -1107,7 +1405,7 @@
 
     function buildWhatsAppLink(totalPrice) {
         const lines = [
-            "Hola, quisiera consultar por este pedido de juegos de La Posada:",
+            "Hola, quisiera consultar por este pedido de La Posada:",
             ""
         ];
 
@@ -1160,7 +1458,7 @@
                     .filter((item) => item && item.id)
                     .map((item) => ({
                         id: String(item.id),
-                        nombre: String(item.nombre || "Juego"),
+                        nombre: String(item.nombre || "Producto"),
                         precio: Number(item.precio) || 0,
                         foto_url: String(item.foto_url || ""),
                         stock: Math.max(0, Number(item.stock) || 0),
@@ -1211,6 +1509,81 @@
         return state.products.find(
             (product) => product.id === String(productId)
         );
+    }
+
+    function getProductClass(product) {
+        const value =
+            String(product.clase_producto || "Juego")
+                .trim();
+
+        if (value === "Expansión") {
+            return "Expansión";
+        }
+
+        if (value === "Fundas") {
+            return "Fundas";
+        }
+
+        return "Juego";
+    }
+
+    function getSleeveSizeKey(product) {
+        const width = Number(product.ancho_funda_mm);
+        const height = Number(product.alto_funda_mm);
+
+        if (
+            !Number.isFinite(width) ||
+            width <= 0 ||
+            !Number.isFinite(height) ||
+            height <= 0
+        ) {
+            return "";
+        }
+
+        return `${width}|${height}`;
+    }
+
+    function formatSleeveSize(product) {
+        const width = Number(product.ancho_funda_mm);
+        const height = Number(product.alto_funda_mm);
+
+        if (
+            !Number.isFinite(width) ||
+            width <= 0 ||
+            !Number.isFinite(height) ||
+            height <= 0
+        ) {
+            return "Tamaño por confirmar";
+        }
+
+        const formatter =
+            new Intl.NumberFormat(
+                "es-BO",
+                {
+                    maximumFractionDigits: 2
+                }
+            );
+
+        return (
+            `${formatter.format(width)} × ` +
+            `${formatter.format(height)} mm`
+        );
+    }
+
+    function formatSleeveQuantity(product) {
+        const quantity =
+            Number(product.cantidad_fundas);
+
+        if (
+            !Number.isFinite(quantity) ||
+            quantity <= 0
+        ) {
+            return "Cantidad por confirmar";
+        }
+
+        return quantity === 1
+            ? "1 funda"
+            : `${quantity} fundas`;
     }
 
     function getAvailabilityKey(stock) {
@@ -1319,11 +1692,11 @@
     }
 
     function showConfigurationMessage() {
-        elements.count.textContent = "Conexión pendiente";
+        elements.count.textContent = "Tienda no disponible";
 
         showStatus(
             "configuration",
-            "Abre js/supabase-config.js y verifica la Project URL y la Publishable key."
+            "Los estantes de La Posada no están disponibles en este momento."
         );
     }
 

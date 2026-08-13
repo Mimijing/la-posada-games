@@ -2486,3 +2486,228 @@ body.dialog-open { overflow: hidden; }
     padding-left: 48px !important;
     padding-right: 14px !important;
 }
+
+
+/* =========================================================
+   CATÁLOGO — JUEGOS / EXPANSIONES
+   Cambios añadidos sin alterar el resto del sitio
+   ========================================================= */
+
+.catalog-format-tabs {
+    margin: 0 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.catalog-format-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.catalog-format-tab {
+    flex: 0 0 auto;
+    padding: 7px 13px;
+    border: 1px solid color-mix(in srgb, var(--gold) 38%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--surface-dark) 72%, transparent);
+    color: var(--gold);
+    font-family: "EB Garamond", serif;
+    font-size: 0.8rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: 180ms ease;
+}
+
+.catalog-format-tab:hover {
+    border-color: var(--gold-light);
+    color: var(--gold-light);
+}
+
+.catalog-format-tab--active {
+    border-color: var(--gold-light);
+    background: linear-gradient(145deg, var(--wine-light), var(--wine));
+    color: var(--gold-light);
+}
+
+.catalog-game-card__format {
+    width: fit-content;
+    margin-bottom: 7px;
+    padding: 4px 8px;
+    border: 1px solid rgba(101, 30, 49, 0.22);
+    border-radius: 999px;
+    background: rgba(101, 30, 49, 0.1);
+    color: #651e31;
+    font-family: "EB Garamond", serif;
+    font-size: 0.65rem;
+    font-weight: 900;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+}
+
+.game-dialog__base-game {
+    margin: -8px 0 20px;
+    padding: 9px 12px;
+    border-left: 3px solid #742b31;
+    border-radius: 0 6px 6px 0;
+    background: rgba(116, 43, 49, 0.08);
+    color: #653228;
+    font-family: "EB Garamond", serif;
+    font-size: 0.9rem;
+    font-weight: 800;
+}
+
+.game-dialog__base-game[hidden] {
+    display: none;
+}
+
+/* Solo el catálogo en celular: filtros compactos y 2 tarjetas por fila */
+@media (max-width: 700px) {
+    .catalog-controls {
+        padding: 15px 13px;
+    }
+
+    .catalog-controls__heading {
+        margin-bottom: 9px;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    .catalog-controls__heading > div {
+        gap: 6px;
+    }
+
+    .catalog-controls__heading > div > .material-symbols-outlined,
+    .catalog-controls__eyebrow {
+        display: none;
+    }
+
+    .catalog-controls h2 {
+        font-size: 1rem;
+    }
+
+    .catalog-reset-button {
+        padding: 5px 8px;
+        gap: 4px;
+        font-size: 0.7rem;
+        white-space: nowrap;
+    }
+
+    .catalog-reset-button .material-symbols-outlined {
+        font-size: 15px;
+    }
+
+    .catalog-format-tabs {
+        margin-bottom: 8px;
+        gap: 5px;
+    }
+
+    .catalog-format-tab {
+        padding: 5px 10px;
+        font-size: 0.68rem;
+    }
+
+    .catalog-filters {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 7px;
+    }
+
+    .catalog-field {
+        gap: 3px;
+        font-size: 0.66rem;
+    }
+
+    .catalog-field--search,
+    .catalog-field--players {
+        grid-column: 1 / -1;
+    }
+
+    .catalog-field input,
+    .catalog-field select {
+        height: 38px;
+        font-size: 0.73rem;
+    }
+
+    .catalog-field input {
+        padding-left: 38px !important;
+    }
+
+    .catalog-input-wrap > .material-symbols-outlined {
+        left: 10px;
+        font-size: 17px;
+    }
+
+    .catalog-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px 9px;
+    }
+
+    .catalog-game-card__image-frame {
+        width: calc(100% - 14px);
+        height: 112px;
+        margin-bottom: -26px;
+        padding: 3px;
+    }
+
+    .catalog-game-card__image-frame::after {
+        inset: 3px;
+    }
+
+    .catalog-game-card__parchment {
+        min-height: 242px;
+        padding: 42px 11px 12px;
+    }
+
+    .catalog-game-card__format {
+        margin-bottom: 5px;
+        padding: 3px 6px;
+        font-size: 0.53rem;
+    }
+
+    .catalog-game-card__difficulty {
+        margin-bottom: 6px;
+        padding: 3px 5px;
+        font-size: 0.55rem;
+    }
+
+    .catalog-game-card h3 {
+        font-size: 0.92rem;
+        line-height: 1.18;
+    }
+
+    .catalog-game-card__metadata {
+        margin: 8px 0;
+        padding: 6px 0;
+        gap: 4px 7px;
+    }
+
+    .catalog-game-card__metadata > span {
+        gap: 2px;
+        font-size: 0.61rem;
+    }
+
+    .catalog-game-card__metadata .material-symbols-outlined {
+        font-size: 14px;
+    }
+
+    .catalog-game-card__description {
+        margin-bottom: 9px;
+        font-size: 0.66rem;
+        line-height: 1.4;
+        -webkit-line-clamp: 2;
+    }
+
+    .catalog-game-card__button {
+        padding: 7px 5px;
+        gap: 3px;
+        font-size: 0.61rem;
+        letter-spacing: 0.03em;
+    }
+
+    .catalog-game-card__button .material-symbols-outlined {
+        font-size: 14px;
+    }
+}

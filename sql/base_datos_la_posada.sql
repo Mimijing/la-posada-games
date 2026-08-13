@@ -314,3 +314,76 @@ create table if not exists public.tienda_imagenes (
 
 create index if not exists tienda_imagenes_tienda_id_idx
 on public.tienda_imagenes(tienda_id);
+-- cambios 13/08 para fundas y expaanciones
+alter table public.catalogo_juegos
+add column if not exists formato text default 'Juego';
+
+alter table public.catalogo_juegos
+add column if not exists juego_base_requerido text;
+
+-- Asegurar que los registros anteriores sean juegos normales
+update public.catalogo_juegos
+set formato = 'Juego'
+where formato is null;
+
+-- Solo permitimos estos dos valores
+alter table public.catalogo_juegos
+drop constraint if exists catalogo_juegos_formato_check;
+
+alter table public.catalogo_juegos
+add constraint catalogo_juegos_formato_check
+check (formato in ('Juego', 'Expansión'));
+-- =============================================
+-- TIENDA: Juego / Expansión / Fundas
+-- =============================================
+
+alter table public.tienda
+add column if not exists clase_producto text default 'Juego';
+
+alter table public.tienda
+add column if not exists juego_base_requerido text;
+
+alter table public.tienda
+add column if not exists ancho_funda_mm numeric(6,2);
+
+alter table public.tienda
+add column if not exists alto_funda_mm numeric(6,2);
+
+alter table public.tienda
+add column if not exists cantidad_fundas integer;
+
+alter table public.tienda
+add column if not exists compatibilidad text;
+
+-- Los productos antiguos se consideran juegos
+update public.tienda
+set clase_producto = 'Juego'
+where clase_producto is null;
+
+-- Limitar las clases permitidas
+alter table public.tienda
+drop constraint if exists tienda_clase_producto_check;
+
+alter table public.tienda
+add constraint tienda_clase_producto_check
+check (
+    clase_producto in ('Juego', 'Expansión', 'Fundas')
+);
+-- =============================================
+-- Permitir campos que no corresponden a fundas
+-- =============================================
+
+alter table public.tienda
+alter column tipo drop not null;
+
+alter table public.tienda
+alter column jugadores_min drop not null;
+
+alter table public.tienda
+alter column jugadores_max drop not null;
+
+alter table public.tienda
+alter column dificultad drop not null;
+
+alter table public.tienda
+alter column duracion_minutos drop not null;

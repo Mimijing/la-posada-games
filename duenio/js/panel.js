@@ -53,6 +53,28 @@
                     required: true,
                     placeholder: "Ej. Catan"
                 }),
+                selectField(
+                    "formato",
+                    "Formato",
+                    ["Juego", "Expansión"],
+                    {
+                        required: true,
+                        defaultValue: "Juego"
+                    }
+                ),
+                field(
+                    "juego_base_requerido",
+                    "Juego base requerido",
+                    "text",
+                    {
+                        placeholder: "Ej. Coffee Rush",
+                        showWhen: {
+                            name: "formato",
+                            values: ["Expansión"]
+                        },
+                        requiredWhenVisible: true
+                    }
+                ),
                 selectField("tipo", "Tipo de juego", GAME_TYPES, {
                     required: true
                 }),
@@ -82,6 +104,9 @@
             ],
             meta(record) {
                 return [
+                    record.formato === "Expansión"
+                        ? "Expansión"
+                        : null,
                     record.tipo,
                     formatPlayers(record),
                     formatDuration(record.duracion_minutos),
@@ -135,11 +160,11 @@
 
         tienda: {
             label: "Tienda",
-            singular: "juego de la tienda",
+            singular: "producto de la tienda",
             eyebrow: "Mercado de la Posada",
-            listTitle: "Juegos en venta",
+            listTitle: "Productos en venta",
             description:
-                "Controla la información, el precio y el stock de los juegos en venta.",
+                "Controla la información, el precio y el stock de los productos en venta.",
             icon: "storefront",
             titleField: "nombre",
             imageField: "foto_url",
@@ -148,29 +173,130 @@
                 field("nombre", "Nombre", "text", {
                     required: true
                 }),
+                selectField(
+                    "clase_producto",
+                    "Clase de producto",
+                    ["Juego", "Expansión", "Fundas"],
+                    {
+                        required: true,
+                        defaultValue: "Juego"
+                    }
+                ),
+                field(
+                    "juego_base_requerido",
+                    "Juego base requerido",
+                    "text",
+                    {
+                        placeholder: "Ej. Coffee Rush",
+                        showWhen: {
+                            name: "clase_producto",
+                            values: ["Expansión"]
+                        },
+                        requiredWhenVisible: true
+                    }
+                ),
                 selectField("tipo", "Tipo de juego", GAME_TYPES, {
-                    required: true
+                    required: true,
+                    showWhen: {
+                        name: "clase_producto",
+                        values: ["Juego", "Expansión"]
+                    }
                 }),
                 field("descripcion", "Descripción", "textarea"),
                 field("jugadores_min", "Jugadores mínimos", "number", {
                     required: true,
-                    min: 1
+                    min: 1,
+                    showWhen: {
+                        name: "clase_producto",
+                        values: ["Juego", "Expansión"]
+                    }
                 }),
                 field("jugadores_max", "Jugadores máximos", "number", {
                     required: true,
-                    min: 1
+                    min: 1,
+                    showWhen: {
+                        name: "clase_producto",
+                        values: ["Juego", "Expansión"]
+                    }
                 }),
                 selectField(
                     "dificultad",
                     "Dificultad",
                     DIFFICULTIES,
-                    { required: true }
+                    {
+                        required: true,
+                        showWhen: {
+                            name: "clase_producto",
+                            values: ["Juego", "Expansión"]
+                        }
+                    }
                 ),
                 field(
                     "duracion_minutos",
                     "Duración en minutos",
                     "number",
-                    { required: true, min: 1 }
+                    {
+                        required: true,
+                        min: 1,
+                        showWhen: {
+                            name: "clase_producto",
+                            values: ["Juego", "Expansión"]
+                        }
+                    }
+                ),
+                field(
+                    "ancho_funda_mm",
+                    "Ancho de funda (mm)",
+                    "number",
+                    {
+                        min: 0.01,
+                        step: 0.01,
+                        showWhen: {
+                            name: "clase_producto",
+                            values: ["Fundas"]
+                        },
+                        requiredWhenVisible: true
+                    }
+                ),
+                field(
+                    "alto_funda_mm",
+                    "Alto de funda (mm)",
+                    "number",
+                    {
+                        min: 0.01,
+                        step: 0.01,
+                        showWhen: {
+                            name: "clase_producto",
+                            values: ["Fundas"]
+                        },
+                        requiredWhenVisible: true
+                    }
+                ),
+                field(
+                    "cantidad_fundas",
+                    "Cantidad de fundas",
+                    "number",
+                    {
+                        min: 1,
+                        step: 1,
+                        showWhen: {
+                            name: "clase_producto",
+                            values: ["Fundas"]
+                        },
+                        requiredWhenVisible: true
+                    }
+                ),
+                field(
+                    "compatibilidad",
+                    "Compatibilidad",
+                    "textarea",
+                    {
+                        placeholder: "Ej. Coffee Rush, Catan o cartas de 63,5 × 88 mm",
+                        showWhen: {
+                            name: "clase_producto",
+                            values: ["Fundas"]
+                        }
+                    }
                 ),
                 field("precio", "Precio en Bs", "number", {
                     required: true,
@@ -184,12 +310,23 @@
                 })
             ],
             meta(record) {
+                const productClass =
+                    record.clase_producto || "Juego";
+
+                const detail =
+                    productClass === "Fundas" &&
+                    record.ancho_funda_mm &&
+                    record.alto_funda_mm
+                        ? `${record.ancho_funda_mm} × ${record.alto_funda_mm} mm`
+                        : record.tipo;
+
                 return [
-                    record.tipo,
+                    productClass,
+                    detail,
                     formatPrice(record.precio),
                     `Stock: ${Number(record.stock) || 0}`,
                     getStockLabel(record.stock)
-                ];
+                ].filter(Boolean);
             }
         },
 
@@ -640,6 +777,9 @@
             );
         });
 
+        bindConditionalFields();
+        updateConditionalFields();
+
         const imageUrl =
             record?.[config.imageField] || "";
 
@@ -675,6 +815,7 @@
         if (definition.type === "checkbox") {
             const label = document.createElement("label");
             label.className = "owner-checkbox owner-checkbox--field";
+            label.dataset.ownerFieldName = definition.name;
 
             const input = document.createElement("input");
             input.type = "checkbox";
@@ -695,6 +836,7 @@
 
         const label = document.createElement("label");
         label.className = "owner-field";
+        label.dataset.ownerFieldName = definition.name;
 
         const text = document.createElement("span");
         text.className = "owner-field__label";
@@ -758,6 +900,67 @@
         return label;
     }
 
+    function bindConditionalFields() {
+        const controllers = elements.formFields.querySelectorAll(
+            '[name="formato"], [name="clase_producto"]'
+        );
+
+        controllers.forEach((controller) => {
+            controller.addEventListener(
+                "change",
+                updateConditionalFields
+            );
+        });
+    }
+
+    function updateConditionalFields() {
+        const config = currentConfig();
+
+        config.fields.forEach((definition) => {
+            const wrapper = elements.formFields.querySelector(
+                `[data-owner-field-name="${definition.name}"]`
+            );
+
+            if (!wrapper) {
+                return;
+            }
+
+            const input = wrapper.querySelector(
+                `[name="${definition.name}"]`
+            );
+
+            if (!input) {
+                return;
+            }
+
+            let visible = true;
+
+            if (definition.showWhen) {
+                const controller = elements.formFields.querySelector(
+                    `[name="${definition.showWhen.name}"]`
+                );
+
+                const controllerValue =
+                    controller?.value || "";
+
+                visible =
+                    definition.showWhen.values.includes(
+                        controllerValue
+                    );
+            }
+
+            wrapper.hidden = !visible;
+            input.disabled = !visible;
+
+            input.required =
+                visible &&
+                Boolean(
+                    definition.required ||
+                    definition.requiredWhenVisible
+                );
+        });
+    }
+
     function closeEditor() {
         if (elements.saveRecord.disabled) {
             return;
@@ -784,22 +987,27 @@
         const payload = {};
 
         for (const definition of config.fields) {
-            if (definition.type === "checkbox") {
-                const checkbox = elements.formFields.querySelector(
-                    `[name="${definition.name}"]`
-                );
+            const input = elements.formFields.querySelector(
+                `[name="${definition.name}"]`
+            );
 
-                payload[definition.name] = checkbox.checked;
+            if (input?.disabled) {
+                payload[definition.name] = null;
+                continue;
+            }
+
+            if (definition.type === "checkbox") {
+                payload[definition.name] = input.checked;
                 continue;
             }
 
             const rawValue = formData.get(definition.name);
 
-            if (
-                definition.type === "number" &&
-                rawValue !== ""
-            ) {
-                payload[definition.name] = Number(rawValue);
+            if (definition.type === "number") {
+                payload[definition.name] =
+                    rawValue === null || rawValue === ""
+                        ? null
+                        : Number(rawValue);
             } else {
                 payload[definition.name] =
                     typeof rawValue === "string"
@@ -1039,7 +1247,7 @@
 
         if (available <= 0) {
             showEditorMessage(
-                "Este juego ya alcanzó el máximo de 5 imágenes."
+                "Este producto ya alcanzó el máximo de 5 imágenes."
             );
             elements.galleryFiles.value = "";
             return;
@@ -1113,7 +1321,7 @@
 
         if (state.galleryItems.length >= MAX_EXTRA_STORE_IMAGES) {
             showEditorMessage(
-                "Este juego ya alcanzó el máximo de 5 imágenes."
+                "Este producto ya alcanzó el máximo de 5 imágenes."
             );
             return;
         }
@@ -1316,7 +1524,7 @@
     async function saveStoreGallery(storeId) {
         if (!storeId) {
             throw new Error(
-                "No se pudo identificar el juego para guardar su galería."
+                "No se pudo identificar el producto para guardar su galería."
             );
         }
 

@@ -21,12 +21,12 @@
             showStatus(
                 elements.announcementsStatus,
                 "configuration",
-                "Revisa la conexión de Supabase."
+                "Revisa la conexión."
             );
             showStatus(
                 elements.gamesStatus,
                 "configuration",
-                "Revisa la conexión de Supabase."
+                "Revisa la conexión."
             );
             return;
         }

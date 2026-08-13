@@ -34,3 +34,8 @@ select
 from public.duenios d
 join auth.users u
     on u.id = d.user_id;
+--subir git
+--git status
+--git add .
+--git commit -m "Añade juegos, expansiones y fundas"
+--git push

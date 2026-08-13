@@ -79,8 +79,7 @@
             <h1 id="shop-title">Lleva una aventura a casa</h1>
 
             <p>
-                Encuentra juegos para compartir nuevas historias.
-                Consulta el stock, arma tu pedido y envíalo directamente por WhatsApp.
+                Encuentra juegos,arma tu pedido y envíalo directamente por WhatsApp.
             </p>
         </div>
     </section>
@@ -92,7 +91,7 @@
 
                 <div>
                     <p class="shop-controls__eyebrow">Busca en el mercado</p>
-                    <h2 id="shop-controls-title">Encuentra tu próximo juego</h2>
+                    <h2 id="shop-controls-title">Encuentra tu próximo producto</h2>
                 </div>
             </div>
 
@@ -102,9 +101,47 @@
             </button>
         </div>
 
+        <div class="shop-class-tabs" aria-label="Clase de producto">
+            <button
+                aria-pressed="true"
+                class="shop-class-tab shop-class-tab--active"
+                data-shop-class=""
+                type="button"
+            >
+                Todos
+            </button>
+
+            <button
+                aria-pressed="false"
+                class="shop-class-tab"
+                data-shop-class="Juego"
+                type="button"
+            >
+                Juegos
+            </button>
+
+            <button
+                aria-pressed="false"
+                class="shop-class-tab"
+                data-shop-class="Expansión"
+                type="button"
+            >
+                Expansiones
+            </button>
+
+            <button
+                aria-pressed="false"
+                class="shop-class-tab"
+                data-shop-class="Fundas"
+                type="button"
+            >
+                Fundas
+            </button>
+        </div>
+
         <div class="shop-filters">
-            <label class="shop-field">
-                Nombre del juego
+            <label class="shop-field shop-field--search">
+                Nombre del producto
 
                 <span class="shop-input-wrap">
                     <span class="material-symbols-outlined" aria-hidden="true">search</span>
@@ -112,13 +149,13 @@
                     <input
                         autocomplete="off"
                         id="shop-search"
-                        placeholder="Ej. Coffe Rush"
+                        placeholder="Ej. Coffee Rush, fundas..."
                         type="search"
                     />
                 </span>
             </label>
 
-            <label class="shop-field">
+            <label class="shop-field shop-field--type" id="shop-type-field">
                 Tipo
 
                 <select id="shop-type">
@@ -133,7 +170,7 @@
                 </select>
             </label>
 
-            <label class="shop-field">
+            <label class="shop-field shop-field--difficulty" id="shop-difficulty-field">
                 Dificultad
 
                 <select id="shop-difficulty">
@@ -144,7 +181,15 @@
                 </select>
             </label>
 
-            <label class="shop-field">
+            <label class="shop-field shop-field--size" id="shop-size-field" hidden>
+                Tamaño
+
+                <select id="shop-size">
+                    <option value="">Todos los tamaños</option>
+                </select>
+            </label>
+
+            <label class="shop-field shop-field--availability">
                 Disponibilidad
 
                 <select id="shop-availability">
@@ -161,15 +206,15 @@
         <div class="shop-results__header">
             <div>
                 <p class="shop-kicker">Estantes del mercado</p>
-                <h2 class="shop-results__title">Juegos en venta</h2>
+                <h2 class="shop-results__title">Productos en venta</h2>
             </div>
 
-            <p id="shop-count">Cargando juegos...</p>
+            <p id="shop-count">Cargando productos...</p>
         </div>
 
         <div class="shop-status" id="shop-status">
             <span class="shop-loader" aria-hidden="true"></span>
-            <p>Consultando la tienda en Supabase...</p>
+            <p>Revisando los estantes de La Posada...</p>
         </div>
 
         <div class="shop-grid" id="shop-grid"></div>
@@ -215,7 +260,7 @@
         <header class="shop-cart__header">
             <div>
                 <p class="shop-cart__eyebrow">Pedido de la Posada</p>
-                <h2 id="shop-cart-title">Tus juegos</h2>
+                <h2 id="shop-cart-title">Tus productos</h2>
             </div>
 
             <button
@@ -231,7 +276,7 @@
         <div class="shop-cart__empty" id="shop-cart-empty">
             <span class="material-symbols-outlined">shopping_bag</span>
             <strong>Tu pedido está vacío</strong>
-            <p>Agrega un juego desde la tienda para comenzar.</p>
+            <p>Agrega un producto desde la tienda para comenzar.</p>
         </div>
 
         <div class="shop-cart__items custom-scrollbar" id="shop-cart-items"></div>

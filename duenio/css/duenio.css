@@ -1967,3 +1967,327 @@ body.owner-editor-open {
         width: 100%;
     }
 }
+
+/* =========================================================
+   PANEL DEL DUEÑO — MÓVIL MÁS COMPACTO Y EN DOS COLUMNAS
+   Solo afecta celulares. Escritorio queda sin cambios.
+   ========================================================= */
+
+@media (max-width: 650px) {
+    .owner-content {
+        width: calc(100% - 16px);
+        padding-top: 14px;
+        padding-bottom: 46px;
+    }
+
+    .owner-topbar {
+        min-height: 66px;
+        padding: 10px 10px;
+        gap: 10px;
+    }
+
+    .owner-topbar h1 {
+        font-size: 1.18rem;
+        line-height: 1.15;
+    }
+
+    .owner-menu-toggle {
+        width: 40px;
+        height: 40px;
+        flex-basis: 40px;
+    }
+
+    .owner-account > .material-symbols-outlined {
+        font-size: 28px;
+    }
+
+    /* Resumen superior más compacto */
+    .owner-summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        margin-bottom: 14px;
+    }
+
+    .owner-summary-card {
+        min-height: 74px;
+        padding: 10px;
+        gap: 8px;
+        border-radius: 8px;
+    }
+
+    .owner-summary-card:nth-child(3) {
+        grid-column: 1 / -1;
+    }
+
+    .owner-summary-card > .material-symbols-outlined {
+        width: 34px;
+        height: 34px;
+        flex-basis: 34px;
+        font-size: 19px;
+    }
+
+    .owner-summary-card small {
+        font-size: 0.57rem;
+        line-height: 1.25;
+    }
+
+    .owner-summary-card strong {
+        font-size: 0.82rem;
+        line-height: 1.2;
+        white-space: normal;
+    }
+
+    /* Encabezado y buscador */
+    .owner-manager {
+        padding: 13px 9px;
+        border-radius: 10px;
+    }
+
+    .owner-manager__heading {
+        gap: 10px;
+        margin-bottom: 0;
+    }
+
+    .owner-manager__heading h2 {
+        font-size: 1.35rem;
+    }
+
+    .owner-manager__heading > div > p:last-child {
+        margin-top: 6px;
+        font-size: 0.7rem;
+        line-height: 1.45;
+    }
+
+    .owner-primary-button--compact {
+        min-height: 42px;
+        font-size: 0.82rem;
+    }
+
+    .owner-toolbar {
+        margin: 15px 0 13px;
+        gap: 7px;
+    }
+
+    .owner-toolbar__search input {
+        height: 41px;
+        padding-left: 38px;
+        font-size: 0.78rem;
+    }
+
+    .owner-toolbar__search .material-symbols-outlined {
+        left: 11px;
+        font-size: 18px;
+    }
+
+    .owner-icon-button {
+        width: 41px;
+        height: 41px;
+        flex: 0 0 41px;
+    }
+
+    /* Registros de TODAS las pestañas en dos columnas */
+    .owner-records {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px 8px;
+    }
+
+    .owner-record-card {
+        border-radius: 8px;
+    }
+
+    .owner-record-card:hover {
+        transform: none;
+    }
+
+    .owner-record-card__image-wrap {
+        height: 105px;
+    }
+
+    .owner-record-card__image--fallback {
+        padding: 19px;
+    }
+
+    .owner-record-card__body {
+        min-height: 78px;
+        padding: 10px 9px 8px;
+    }
+
+    .owner-record-card h3 {
+        font-size: 0.84rem;
+        line-height: 1.2;
+    }
+
+    .owner-record-card__meta {
+        margin-top: 7px;
+        gap: 4px;
+    }
+
+    .owner-record-card__meta span {
+        padding: 3px 5px;
+        font-size: 0.54rem;
+        line-height: 1.2;
+    }
+
+    .owner-record-card__actions {
+        padding: 7px;
+        gap: 5px;
+    }
+
+    .owner-record-card__edit,
+    .owner-record-card__delete {
+        min-height: 33px;
+        padding: 4px 3px;
+        gap: 3px;
+        font-size: 0.7rem;
+    }
+
+    .owner-record-card__actions .material-symbols-outlined {
+        font-size: 14px;
+    }
+
+    .owner-status {
+        min-height: 120px;
+        padding: 20px 12px;
+        font-size: 0.75rem;
+    }
+
+    /* Editor lateral: más ordenado y compacto */
+    .owner-editor__header {
+        padding: 16px 14px;
+    }
+
+    .owner-editor__header h2 {
+        font-size: 1.35rem;
+    }
+
+    .owner-editor__close {
+        width: 38px;
+        height: 38px;
+    }
+
+    .owner-editor-form {
+        padding: 14px;
+    }
+
+    .owner-editor-form__fields {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px 8px;
+    }
+
+    .owner-editor-form__fields .owner-field:has(textarea),
+    .owner-editor-form__fields .owner-field:has([name="nombre"]),
+    .owner-editor-form__fields .owner-field:has([name="juego_base_requerido"]),
+    .owner-editor-form__fields .owner-field:has([name="compatibilidad"]) {
+        grid-column: 1 / -1;
+    }
+
+    .owner-field {
+        gap: 5px;
+        font-size: 0.68rem;
+    }
+
+    .owner-field input:not([type="checkbox"]),
+    .owner-field select {
+        min-height: 42px;
+        padding: 0 9px;
+        font-size: 0.77rem;
+    }
+
+    .owner-field textarea {
+        min-height: 88px;
+        padding: 10px;
+        font-size: 0.77rem;
+    }
+
+    .owner-checkbox--field {
+        min-height: 42px;
+        padding: 0 9px;
+        font-size: 0.7rem;
+    }
+
+    /* Imagen principal compacta en dos columnas */
+    .owner-image-editor,
+    .owner-gallery-editor {
+        margin-top: 14px;
+        padding: 13px;
+    }
+
+    .owner-image-editor__heading {
+        margin-bottom: 10px;
+    }
+
+    .owner-image-editor__heading h3,
+    .owner-gallery-editor__heading h3 {
+        font-size: 1rem;
+    }
+
+    .owner-image-editor__layout {
+        grid-template-columns: minmax(0, 1fr) 105px;
+        gap: 8px;
+        margin-bottom: 12px;
+    }
+
+    .owner-file-drop,
+    .owner-image-preview {
+        min-height: 112px;
+    }
+
+    .owner-file-drop {
+        padding: 10px;
+    }
+
+    .owner-file-drop > .material-symbols-outlined {
+        font-size: 28px;
+    }
+
+    .owner-file-drop strong {
+        font-size: 0.8rem;
+    }
+
+    .owner-file-drop small {
+        font-size: 0.58rem;
+    }
+
+    .owner-image-preview {
+        min-height: 112px;
+    }
+
+    /* Galería sigue en dos columnas */
+    .owner-gallery-editor__items {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .owner-gallery-editor__help {
+        margin-bottom: 12px;
+        font-size: 0.65rem;
+    }
+
+    .owner-gallery-add {
+        min-height: 62px;
+        padding: 10px;
+    }
+
+    .owner-gallery-url {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    /* Guardar / Cancelar juntos */
+    .owner-editor__actions {
+        bottom: -14px;
+        margin: 18px -14px -14px;
+        padding: 12px 14px;
+        flex-direction: row;
+        gap: 8px;
+    }
+
+    .owner-editor__actions button {
+        width: auto;
+        flex: 1;
+        min-height: 43px;
+        padding: 8px 10px;
+        font-size: 0.8rem;
+    }
+}
+

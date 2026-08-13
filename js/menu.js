@@ -76,7 +76,7 @@
         showStatus(
             elements.productsStatus,
             "loading",
-            "Consultando el menú en Supabase..."
+            "Consultando el menú de La posada"
         );
 
         const { data, error } =
@@ -91,14 +91,14 @@
 
         if (error) {
             console.error(
-                "Error al cargar la tabla menu:",
+                "Error al cargar el menu:",
                 error
             );
 
             showStatus(
                 elements.productsStatus,
                 "error",
-                "No se pudo cargar el menú. Comprueba la columna disponible y las políticas RLS."
+                "No se pudo cargar el menú."
             );
 
             elements.count.textContent =
@@ -216,29 +216,55 @@
             url.trim() !== "";
 
         image.className = className;
-        image.src = hasPhoto
-            ? url.trim()
-            : FALLBACK_IMAGE;
-
         image.alt = alt;
-        image.loading = "lazy";
+        image.decoding = "async";
 
         if (!hasPhoto) {
+            image.src = FALLBACK_IMAGE;
             image.classList.add(
                 `${className}--fallback`
             );
+            return image;
         }
 
-        image.addEventListener(
+        /*
+         * La tarjeta nunca queda con un rectángulo oscuro:
+         * mostramos el logo mientras la foto real termina de cargar.
+         * La descarga de la foto comienza inmediatamente.
+         */
+        image.src = FALLBACK_IMAGE;
+        image.classList.add(
+            `${className}--placeholder`
+        );
+
+        const realImage = new Image();
+        realImage.decoding = "async";
+
+        realImage.addEventListener(
+            "load",
+            () => {
+                image.src = url.trim();
+                image.classList.remove(
+                    `${className}--placeholder`
+                );
+            },
+            { once: true }
+        );
+
+        realImage.addEventListener(
             "error",
             () => {
-                image.src = FALLBACK_IMAGE;
+                image.classList.remove(
+                    `${className}--placeholder`
+                );
                 image.classList.add(
                     `${className}--fallback`
                 );
             },
             { once: true }
         );
+
+        realImage.src = url.trim();
 
         return image;
     }

@@ -13,7 +13,8 @@
         games: [],
         visibleGames: [],
         currentPage: 1,
-        gamesPerPage: 21
+        gamesPerPage: 21,
+        selectedFormat: ""
     };
 
     const elements = {};
@@ -30,6 +31,7 @@
         elements.type = document.getElementById("catalog-type");
         elements.difficulty = document.getElementById("catalog-difficulty");
         elements.players = document.getElementById("catalog-players");
+        elements.formatButtons = Array.from(document.querySelectorAll("[data-catalog-format]"));
         elements.reset = document.getElementById("catalog-reset");
         elements.dialog = document.getElementById("game-dialog");
         elements.dialogPanel = elements.dialog?.querySelector(".game-dialog__panel");
@@ -64,11 +66,21 @@
             }
         });
 
+        elements.formatButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                state.selectedFormat = button.dataset.catalogFormat || "";
+                updateFormatButtons();
+                applyFilters();
+            });
+        });
+
         elements.reset?.addEventListener("click", () => {
             elements.search.value = "";
             elements.type.value = "";
             elements.difficulty.value = "";
             elements.players.value = "";
+            state.selectedFormat = "";
+            updateFormatButtons();
 
             if (elements.headerSearch) {
                 elements.headerSearch.value = "";
@@ -76,6 +88,14 @@
 
             applyFilters();
             elements.search.focus();
+        });
+    }
+
+    function updateFormatButtons() {
+        elements.formatButtons.forEach((button) => {
+            const isActive = (button.dataset.catalogFormat || "") === state.selectedFormat;
+            button.classList.toggle("catalog-format-tab--active", isActive);
+            button.setAttribute("aria-pressed", String(isActive));
         });
     }
 
@@ -97,12 +117,12 @@
             return;
         }
 
-        showStatus("loading", "Consultando la biblioteca de Supabase...");
+        showStatus("loading", "Consultando los pergaminos de La posada");
 
         const { data, error } = await window.laPosadaSupabase
             .from("catalogo_juegos")
             .select(
-                "id,nombre,tipo,descripcion,jugadores_min,jugadores_max,dificultad,duracion_minutos,foto_url"
+                "id,nombre,tipo,descripcion,jugadores_min,jugadores_max,dificultad,duracion_minutos,foto_url,formato,juego_base_requerido"
             )
             .order("nombre", { ascending: true });
 
@@ -110,7 +130,7 @@
             console.error("Error al cargar catalogo_juegos:", error);
             showStatus(
                 "error",
-                "No se pudo cargar el catálogo. Revisa la conexión, el nombre de la tabla y las políticas RLS."
+                "No se pudo cargar el catálogo."
             );
             elements.count.textContent = "Error al cargar";
             return;
@@ -125,6 +145,7 @@
         const selectedType = elements.type?.value || "";
         const selectedDifficulty = elements.difficulty?.value || "";
         const selectedPlayers = Number(elements.players?.value || 0);
+        const selectedFormat = state.selectedFormat;
 
         state.visibleGames = state.games.filter((game) => {
             const searchableText = normalizeText(
@@ -137,6 +158,8 @@
             const matchesType = !selectedType || game.tipo === selectedType;
             const matchesDifficulty =
                 !selectedDifficulty || game.dificultad === selectedDifficulty;
+            const gameFormat = game.formato || "Juego";
+            const matchesFormat = !selectedFormat || gameFormat === selectedFormat;
 
             let matchesPlayers = true;
             if (selectedPlayers) {
@@ -153,7 +176,8 @@
                 matchesSearch &&
                 matchesType &&
                 matchesDifficulty &&
-                matchesPlayers
+                matchesPlayers &&
+                matchesFormat
             );
         });
         state.currentPage = 1;
@@ -177,7 +201,7 @@
             showStatus(
                 "empty",
                 state.games.length === 0
-                    ? "Todavía no hay juegos registrados en Supabase."
+                    ? "Todavía no hay juegos registrados"
                     : "No encontramos juegos con esos filtros."
             );
 
@@ -373,6 +397,15 @@
         const parchment = document.createElement("div");
         parchment.className = "catalog-game-card__parchment";
 
+        const isExpansion = normalizeText(game.formato) === "expansion";
+        let formatBadge = null;
+
+        if (isExpansion) {
+            formatBadge = document.createElement("span");
+            formatBadge.className = "catalog-game-card__format";
+            formatBadge.textContent = "Expansión";
+        }
+
         const difficulty = document.createElement("span");
         difficulty.className = `catalog-game-card__difficulty catalog-game-card__difficulty--${difficultyClass(game.dificultad)}`;
         difficulty.textContent = game.dificultad || "Sin nivel";
@@ -399,6 +432,10 @@
             <span>Abrir pergamino</span>
             <span class="material-symbols-outlined" aria-hidden="true">menu_book</span>
         `;
+
+        if (formatBadge) {
+            parchment.appendChild(formatBadge);
+        }
 
         parchment.append(difficulty, title, metadata, description, button);
         card.append(imageFrame, parchment);
@@ -447,6 +484,17 @@
             game.descripcion ||
             "Este juego todavía no tiene una descripción.";
 
+        const baseGame = document.getElementById("dialog-game-base");
+        const requiredGame = String(game.juego_base_requerido || "").trim();
+
+        if (normalizeText(game.formato) === "expansion" && requiredGame) {
+            baseGame.textContent = `Requiere el juego base: ${requiredGame}`;
+            baseGame.hidden = false;
+        } else {
+            baseGame.textContent = "";
+            baseGame.hidden = true;
+        }
+
         document.getElementById("dialog-game-players").textContent =
             formatPlayers(game);
 
@@ -487,7 +535,7 @@
         elements.status.innerHTML = `
             <span class="material-symbols-outlined" aria-hidden="true">database</span>
             <div>
-                <strong>Falta conectar Supabase</strong>
+                <strong>Falta conectar</strong>
                 <p>
                     Abre <code>js/supabase-config.js</code> y pega la Project URL
                     y la Publishable key de tu proyecto.

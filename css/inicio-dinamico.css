@@ -312,3 +312,245 @@
         margin-top: 12px;
     }
 }
+
+/* =========================================================
+   INICIO — ADAPTACIÓN MÓVIL SIN PERDER EL DISEÑO DE PC
+   ========================================================= */
+
+@media (max-width: 700px) {
+    /* Anuncios: una sola fila horizontal, 2 visibles */
+    .home-announcements-column {
+        min-width: 0;
+    }
+
+    .announcements-list,
+    .announcements-list--scroll {
+        width: 100%;
+        max-height: none;
+        padding: 0 0 10px;
+
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        gap: 10px;
+
+        overflow-x: auto;
+        overflow-y: hidden;
+
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x mandatory;
+        scroll-padding-inline: 0;
+
+        scrollbar-width: thin;
+        scrollbar-color: var(--gold) rgba(27, 9, 3, 0.72);
+    }
+
+    .announcements-list::-webkit-scrollbar,
+    .announcements-list--scroll::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    .announcements-list::-webkit-scrollbar-track,
+    .announcements-list--scroll::-webkit-scrollbar-track {
+        border-radius: 999px;
+        background: rgba(27, 9, 3, 0.72);
+    }
+
+    .announcements-list::-webkit-scrollbar-thumb,
+    .announcements-list--scroll::-webkit-scrollbar-thumb {
+        border: 1px solid rgba(244, 228, 131, 0.35);
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    }
+
+    .kingdom-announcement {
+        width: auto;
+        height: auto;
+        flex: 0 0 calc((100% - 10px) / 2);
+        min-width: 0;
+
+        aspect-ratio: 3 / 4;
+
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+
+        border-radius: 8px;
+
+        box-shadow:
+            0 10px 20px rgba(0, 0, 0, 0.38),
+            inset 0 0 0 3px rgba(43, 22, 13, 0.58),
+            inset 0 0 0 5px rgba(215, 200, 106, 0.07);
+
+        transition: none;
+    }
+
+    .kingdom-announcement:hover {
+        transform: none;
+    }
+
+    .kingdom-announcement::after {
+        inset: 6px;
+    }
+
+    .kingdom-announcement__image {
+        width: 100% !important;
+        height: 100% !important;
+        aspect-ratio: auto;
+
+        object-fit: contain !important;
+        object-position: center !important;
+    }
+
+    /* Juegos destacados */
+    .home-featured-column {
+        min-width: 0;
+        margin-top: 26px;
+    }
+
+    .home-featured-heading {
+        margin-bottom: 16px !important;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    .home-featured-heading__title {
+        min-width: 0;
+        flex: 1;
+        gap: 6px;
+    }
+
+    .home-featured-heading__title .material-symbols-outlined {
+        flex: 0 0 auto;
+        font-size: 21px;
+    }
+
+    .home-featured-heading__title h3 {
+        margin: 0;
+        min-width: 0;
+
+        font-size: clamp(1.05rem, 5.2vw, 1.4rem) !important;
+        line-height: 1.05 !important;
+
+        white-space: nowrap;
+    }
+
+    .featured-library-button {
+        width: auto;
+        min-width: max-content;
+        min-height: 36px;
+
+        margin-top: 0;
+        padding: 7px 10px;
+        gap: 5px;
+
+        flex: 0 0 auto;
+
+        font-size: 0.68rem;
+        letter-spacing: 0.02em;
+    }
+
+    .featured-library-button .material-symbols-outlined {
+        font-size: 16px;
+    }
+
+    #home-featured-games {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px !important;
+    }
+
+    .featured-game-card {
+        min-width: 0;
+        border-radius: 8px;
+
+        box-shadow:
+            0 12px 22px rgba(0, 0, 0, 0.35),
+            inset 0 0 0 3px rgba(27, 9, 3, 0.28);
+
+        transition: none;
+    }
+
+    .featured-game-card:hover {
+        transform: none;
+    }
+
+    .featured-game-card__image-wrap {
+        height: 118px;
+    }
+
+    .featured-game-card__image {
+        transition: none;
+    }
+
+    .featured-game-card:hover .featured-game-card__image {
+        transform: none;
+    }
+
+    .featured-game-card__image--fallback {
+        padding: 20px;
+    }
+
+    .featured-game-card__type {
+        right: 7px;
+        bottom: 7px;
+
+        max-width: calc(100% - 14px);
+        padding: 4px 6px;
+
+        font-size: 0.54rem;
+        letter-spacing: 0.04em;
+    }
+
+    .featured-game-card__content {
+        padding: 12px 10px 11px;
+    }
+
+    .featured-game-card h4 {
+        font-size: 0.92rem;
+        line-height: 1.18;
+    }
+
+    .featured-game-card__description {
+        margin: 7px 0 9px;
+
+        font-size: 0.64rem;
+        line-height: 1.42;
+
+        -webkit-line-clamp: 2;
+    }
+
+    .featured-game-card__metadata {
+        padding-top: 8px;
+        gap: 5px 7px;
+    }
+
+    .featured-game-card__metadata > span {
+        gap: 3px;
+
+        font-size: 0.56rem;
+        line-height: 1.2;
+    }
+
+    .featured-game-card__metadata .material-symbols-outlined {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 390px) {
+    .home-featured-heading__title h3 {
+        font-size: 1rem !important;
+    }
+
+    .featured-library-button {
+        padding: 6px 8px;
+        font-size: 0.63rem;
+    }
+
+    .featured-game-card__image-wrap {
+        height: 108px;
+    }
+}
+

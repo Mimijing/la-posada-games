@@ -167,7 +167,7 @@
 
         showStatus(
             "loading",
-            "Consultando las promociones en Supabase..."
+            "Cargando promociones..."
         );
 
         const { data, error } =
@@ -188,7 +188,7 @@
 
             showStatus(
                 "error",
-                "No se pudieron cargar las promociones. Ejecuta el SQL incluido y revisa las políticas RLS."
+                "No se pudieron cargar las promociones."
             );
 
             return;
