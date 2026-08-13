@@ -316,31 +316,22 @@
 /* =========================================================
    INICIO — ADAPTACIÓN MÓVIL SIN PERDER EL DISEÑO DE PC
    ========================================================= */
-
 @media (max-width: 700px) {
-    /* Anuncios: una sola fila horizontal, 2 visibles */
-    .home-announcements-column {
-        min-width: 0;
-    }
+    .home-announcements-column { min-width: 0; }
 
     .announcements-list,
     .announcements-list--scroll {
         width: 100%;
         max-height: none;
         padding: 0 0 10px;
-
         display: flex;
         flex-direction: row;
         align-items: stretch;
-        gap: 10px;
-
+        gap: 8px;
         overflow-x: auto;
         overflow-y: hidden;
-
         overscroll-behavior-x: contain;
         scroll-snap-type: x mandatory;
-        scroll-padding-inline: 0;
-
         scrollbar-width: thin;
         scrollbar-color: var(--gold) rgba(27, 9, 3, 0.72);
     }
@@ -366,42 +357,27 @@
     .kingdom-announcement {
         width: auto;
         height: auto;
-        flex: 0 0 calc((100% - 10px) / 2);
+        flex: 0 0 calc((100% - 8px) / 2);
         min-width: 0;
-
-        aspect-ratio: 3 / 4;
-
+        max-height: 235px;
         scroll-snap-align: start;
         scroll-snap-stop: always;
-
         border-radius: 8px;
-
-        box-shadow:
-            0 10px 20px rgba(0, 0, 0, 0.38),
-            inset 0 0 0 3px rgba(43, 22, 13, 0.58),
-            inset 0 0 0 5px rgba(215, 200, 106, 0.07);
-
         transition: none;
     }
 
-    .kingdom-announcement:hover {
-        transform: none;
-    }
+    .kingdom-announcement:hover { transform: none; }
 
-    .kingdom-announcement::after {
-        inset: 6px;
-    }
+    .kingdom-announcement::after { inset: 6px; }
 
     .kingdom-announcement__image {
         width: 100% !important;
         height: 100% !important;
         aspect-ratio: auto;
-
         object-fit: contain !important;
-        object-position: center !important;
+        object-position: center top !important;
     }
 
-    /* Juegos destacados */
     .home-featured-column {
         min-width: 0;
         margin-top: 26px;
@@ -409,7 +385,6 @@
 
     .home-featured-heading {
         margin-bottom: 16px !important;
-
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -430,10 +405,8 @@
     .home-featured-heading__title h3 {
         margin: 0;
         min-width: 0;
-
         font-size: clamp(1.05rem, 5.2vw, 1.4rem) !important;
         line-height: 1.05 !important;
-
         white-space: nowrap;
     }
 
@@ -441,72 +414,48 @@
         width: auto;
         min-width: max-content;
         min-height: 36px;
-
         margin-top: 0;
         padding: 7px 10px;
         gap: 5px;
-
         flex: 0 0 auto;
-
         font-size: 0.68rem;
         letter-spacing: 0.02em;
     }
 
-    .featured-library-button .material-symbols-outlined {
-        font-size: 16px;
-    }
+    .featured-library-button .material-symbols-outlined { font-size: 16px; }
 
     #home-featured-games {
         display: grid !important;
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-        gap: 10px !important;
+        gap: 9px !important;
     }
 
     .featured-game-card {
         min-width: 0;
         border-radius: 8px;
-
-        box-shadow:
-            0 12px 22px rgba(0, 0, 0, 0.35),
-            inset 0 0 0 3px rgba(27, 9, 3, 0.28);
-
         transition: none;
     }
 
-    .featured-game-card:hover {
-        transform: none;
-    }
+    .featured-game-card:hover { transform: none; }
 
-    .featured-game-card__image-wrap {
-        height: 118px;
-    }
+    .featured-game-card__image-wrap { height: 132px; }
 
-    .featured-game-card__image {
-        transition: none;
-    }
+    .featured-game-card__image { transition: none; }
 
-    .featured-game-card:hover .featured-game-card__image {
-        transform: none;
-    }
+    .featured-game-card:hover .featured-game-card__image { transform: none; }
 
-    .featured-game-card__image--fallback {
-        padding: 20px;
-    }
+    .featured-game-card__image--fallback { padding: 20px; }
 
     .featured-game-card__type {
         right: 7px;
         bottom: 7px;
-
         max-width: calc(100% - 14px);
         padding: 4px 6px;
-
         font-size: 0.54rem;
         letter-spacing: 0.04em;
     }
 
-    .featured-game-card__content {
-        padding: 12px 10px 11px;
-    }
+    .featured-game-card__content { padding: 12px 10px 11px; }
 
     .featured-game-card h4 {
         font-size: 0.92rem;
@@ -515,10 +464,8 @@
 
     .featured-game-card__description {
         margin: 7px 0 9px;
-
         font-size: 0.64rem;
         line-height: 1.42;
-
         -webkit-line-clamp: 2;
     }
 
@@ -529,7 +476,6 @@
 
     .featured-game-card__metadata > span {
         gap: 3px;
-
         font-size: 0.56rem;
         line-height: 1.2;
     }
@@ -537,9 +483,24 @@
     .featured-game-card__metadata .material-symbols-outlined {
         font-size: 13px;
     }
+
+    /* less desktop-style side padding on mobile */
+    main > .px-margin-desktop {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+        gap: 20px !important;
+    }
 }
 
 @media (max-width: 390px) {
+    main > .px-margin-desktop {
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+    }
+
+    .kingdom-announcement { max-height: 218px; }
+    .featured-game-card__image-wrap { height: 122px; }
+
     .home-featured-heading__title h3 {
         font-size: 1rem !important;
     }
@@ -547,10 +508,6 @@
     .featured-library-button {
         padding: 6px 8px;
         font-size: 0.63rem;
-    }
-
-    .featured-game-card__image-wrap {
-        height: 108px;
     }
 }
 
